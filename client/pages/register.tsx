@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import { useRegisterMutation } from '../generated/graphql';
 import {useRouter} from 'next/router';
 import { toErrorMap } from '../util/toErrorMap';
+import { withUrqlClient } from 'next-urql';
+import { createUrqlClient } from '../util/createUrqlClient';
 
 interface RegisterProps {}
 
@@ -19,6 +21,8 @@ const SignupSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
+
+  email: Yup.string().email(),
 });
 
 const Register: React.FC<RegisterProps> = ({}) => {
@@ -31,10 +35,11 @@ const Register: React.FC<RegisterProps> = ({}) => {
         initialValues={{
           username: '',
           password: '',
+          email: '',
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
-          const response = await register(values);
+          const response = await register({options: values});
           if(response.data?.register.errors){
             console.log(toErrorMap(response.data.register.errors))
           } else if (response.data?.register.user){
@@ -57,6 +62,10 @@ const Register: React.FC<RegisterProps> = ({}) => {
               <div>{errors.password}</div>
             ) : null}
 
+            <label htmlFor='email'>Email:</label>
+            <Field name='email' placeholder='email'/>
+              
+
             <button type='submit'>Register</button>
           </Form>
         )}
@@ -65,4 +74,4 @@ const Register: React.FC<RegisterProps> = ({}) => {
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);

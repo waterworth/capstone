@@ -1,10 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { useMeQuery } from '../generated/graphql';
+import { useLoginMutation, useLogoutMutation, useMeQuery } from '../generated/graphql';
 
 interface NavProps {}
 
 const Nav: React.FC<NavProps> = ({}) => {
+  const [, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
   let body = null;
 
@@ -23,7 +24,10 @@ const Nav: React.FC<NavProps> = ({}) => {
   // is logged in
   } else {
       body = (
+        <>
           <h1>Welcome {data.me.username}</h1>
+          <button onClick={() => { logout()}}> Logout</button>
+          </>
       )
   }
 

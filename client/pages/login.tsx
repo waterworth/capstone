@@ -6,6 +6,7 @@ import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../util/toErrorMap';
 import { withUrqlClient} from 'next-urql';
 import { createUrqlClient } from '../util/createUrqlClient';
+import Link from 'next/link';
 
 interface LoginProps {}
 
@@ -60,7 +61,9 @@ const Login: React.FC<LoginProps> = ({}) => {
             ) : null}
 
             <button type='submit'>Login</button>
-
+            <Link href="/forgot-password">
+                Forgot Password?
+              </Link> 
           </Form>
         )}
       </Formik>

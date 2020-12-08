@@ -1,6 +1,7 @@
 import { Formik, Form, Field } from 'formik';
 import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { useChangePasswordMutation } from '../../generated/graphql';
@@ -35,7 +36,14 @@ const ChangePassword: NextPage<{token:string}> = ({token}) => {
           <Form>
             <label htmlFor='newPassword'>New Password:</label>
             <Field name='newPassword' type="password" />
-            {tokenError ? <div>{tokenError}</div> : null}
+            {tokenError ? (
+              <>
+              <div>{tokenError}</div>
+              <Link href="/forgot-password">
+                Request a new password
+              </Link> 
+              </>
+              ): null}
             
             <button type='submit'>Change Password</button>
 

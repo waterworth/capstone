@@ -30,18 +30,21 @@ export type QueryMeetingArgs = {
 export type Meeting = {
   __typename?: 'Meeting';
   id: Scalars['Int'];
+  title: Scalars['String'];
+  timeslot: Scalars['String'];
+  hostId: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  title: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
   id: Scalars['Int'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
   username: Scalars['String'];
   email: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Mutation = {
@@ -58,7 +61,7 @@ export type Mutation = {
 
 
 export type MutationCreateMeetingArgs = {
-  title: Scalars['String'];
+  input: MeetingInput;
 };
 
 
@@ -92,6 +95,11 @@ export type MutationRegisterArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   usernameOrEmail: Scalars['String'];
+};
+
+export type MeetingInput = {
+  title: Scalars['String'];
+  timeslot: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -144,6 +152,19 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type CreateMeetingMutationVariables = Exact<{
+  input: MeetingInput;
+}>;
+
+
+export type CreateMeetingMutation = (
+  { __typename?: 'Mutation' }
+  & { createMeeting: (
+    { __typename?: 'Meeting' }
+    & Pick<Meeting, 'id' | 'title' | 'timeslot' | 'hostId' | 'createdAt' | 'updatedAt'>
   ) }
 );
 
@@ -210,7 +231,7 @@ export type MeetingsQuery = (
   { __typename?: 'Query' }
   & { meetings: Array<(
     { __typename?: 'Meeting' }
-    & Pick<Meeting, 'id' | 'title'>
+    & Pick<Meeting, 'id' | 'title' | 'timeslot' | 'hostId'>
   )> }
 );
 
@@ -248,6 +269,22 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateMeetingDocument = gql`
+    mutation CreateMeeting($input: MeetingInput!) {
+  createMeeting(input: $input) {
+    id
+    title
+    timeslot
+    hostId
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateMeetingMutation() {
+  return Urql.useMutation<CreateMeetingMutation, CreateMeetingMutationVariables>(CreateMeetingDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
@@ -305,6 +342,8 @@ export const MeetingsDocument = gql`
   meetings {
     id
     title
+    timeslot
+    hostId
   }
 }
     `;

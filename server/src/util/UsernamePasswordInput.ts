@@ -9,4 +9,6 @@ export class UsernamePasswordInput {
     password: string;
     @Field()
     email: string;
+    @Field()
+    isAdmin: boolean;
 }

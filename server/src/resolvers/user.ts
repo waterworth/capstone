@@ -146,6 +146,7 @@ export class UserResolver {
           username: options.username,
           password: hasedPassword,
           email: options.email,
+          isAdmin: options.isAdmin,
         })
         .returning('*')
         .execute();

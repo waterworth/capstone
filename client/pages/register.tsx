@@ -2,14 +2,12 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { useRegisterMutation } from '../generated/graphql';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import { toErrorMap } from '../util/toErrorMap';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../util/createUrqlClient';
 
 interface RegisterProps {}
-
-
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -36,14 +34,16 @@ const Register: React.FC<RegisterProps> = ({}) => {
           username: '',
           password: '',
           email: '',
+          isAdmin: false,
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
-          const response = await register({options: values});
-          if(response.data?.register.errors){
-            console.log(toErrorMap(response.data.register.errors))
-          } else if (response.data?.register.user){
-            router.push('/')
+          const response = await register({ options: values });
+          console.log(values);
+          if (response.data?.register.errors) {
+            console.log(toErrorMap(response.data.register.errors));
+          } else if (response.data?.register.user) {
+            router.push('/');
           }
         }}>
         {({ errors, touched }) => (
@@ -63,8 +63,11 @@ const Register: React.FC<RegisterProps> = ({}) => {
             ) : null}
 
             <label htmlFor='email'>Email:</label>
-            <Field name='email' placeholder='email'/>
-              
+            <Field name='email' placeholder='email' />
+
+            {errors.password && touched.password ? (
+              <div>{errors.email}</div>
+            ) : null}
 
             <button type='submit'>Register</button>
           </Form>

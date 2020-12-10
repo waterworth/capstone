@@ -10,7 +10,6 @@ import {
   Resolver,
 } from 'type-graphql';
 import argon2 from 'argon2';
-import { EntityManager } from '@mikro-orm/postgresql';
 import { COOKIE__NAME, FORGET__PASSWORD__PREFIX } from '../constants';
 import { UsernamePasswordInput } from '../util/UsernamePasswordInput';
 import { validateRegister } from '../util/validateRegister';
@@ -152,7 +151,8 @@ export class UserResolver {
         .execute();
       console.log(result);
 
-      // user = result.raw
+      user = result.raw[0];
+
     } catch (err) {
       //Duplicate username
       if (err.code === '23505') {

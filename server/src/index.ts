@@ -1,4 +1,3 @@
-
 import { ApolloServer } from 'apollo-server-express';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
@@ -16,8 +15,6 @@ import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
 
-
-
 const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
@@ -27,7 +24,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     entities: [Meeting, User],
-  })
+  });
 
   const app = express();
   app.use(

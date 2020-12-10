@@ -1,6 +1,16 @@
 import { Meeting } from "../entities/Meeting";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Mutation, Query, Resolver, InputType, Field, Ctx, UseMiddleware } from "type-graphql";
+import { MyContext } from "../types";
+import { isAuth } from "../middleware/isAuth";
 
+
+@InputType()
+class MeetingInput{
+  @Field()
+  title: string;
+  @Field()
+  timeslot: string;
+}
 @Resolver()
 export class MeetingResolver{
     // Read
@@ -14,8 +24,12 @@ export class MeetingResolver{
       return Meeting.findOne(id);  
     }
     @Mutation(() => Meeting)
-    async createMeeting(@Arg('title') title: string): Promise<Meeting> {
-        return Meeting.create({title}).save();
+    @UseMiddleware(isAuth)
+    async createMeeting(
+        @Arg('input') input: MeetingInput,
+        @Ctx() {req} : MyContext
+    ): Promise<Meeting> {
+        return Meeting.create({...input, hostId: req.session.userId}).save();
     }
     // Update
     @Mutation(() => Meeting, {nullable: true})

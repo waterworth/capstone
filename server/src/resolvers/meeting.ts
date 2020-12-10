@@ -1,57 +1,42 @@
 import { Meeting } from "../entities/Meeting";
-import { MyContext } from "src/types";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class MeetingResolver{
     // Read
     @Query(() => [Meeting])
-    meetings(
-        @Ctx() {em}: MyContext): Promise<Meeting[]> {
-      return em.find(Meeting, {});  
+    async meetings(): Promise<Meeting[]> {
+      return Meeting.find();  
     }
     // Create
     @Query(() => Meeting, {nullable: true})
-    meeting(
-        @Arg('id') id: number, 
-        @Ctx() {em}: MyContext
-    ): Promise<Meeting | null> {
-      return em.findOne(Meeting, {id});  
+    meeting(@Arg('id') id: number): Promise<Meeting | undefined> {
+      return Meeting.findOne(id);  
     }
     @Mutation(() => Meeting)
-    async createMeeting(
-        @Arg('title') title: String, 
-        @Ctx() {em}: MyContext
-    ): Promise<Meeting> {
-        const meeting = em.create(Meeting, {title})
-        await em.persistAndFlush(meeting);
-        return meeting;
+    async createMeeting(@Arg('title') title: string): Promise<Meeting> {
+        return Meeting.create({title}).save();
     }
     // Update
     @Mutation(() => Meeting, {nullable: true})
     async updateMeeting(
         @Arg('id') id: number, 
         @Arg('title', () => String) title: string,
-        @Ctx() {em}: MyContext
     ): Promise<Meeting | null> {
-        const meeting = await em.findOne(Meeting, {id});
+        const meeting = await Meeting.findOne(id);
             if(!meeting){
                 return null
             }
             if(typeof title !== 'undefined'){
-                meeting.title = title
-                await em.persistAndFlush(meeting);
+                await Meeting.update({id}, {title})
             }
         return meeting;
     }
     // Delete
     @Mutation(() => Boolean)
-    async deleteMeeting(
-        @Arg('id') id: number, 
-        @Ctx() {em}: MyContext
-    ): Promise<boolean> {
+    async deleteMeeting(@Arg('id') id: number): Promise<boolean> {
         try{
-        await em.nativeDelete(Meeting, {id})
+        await Meeting.delete(id)
         } catch {
             return false
         };

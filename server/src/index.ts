@@ -1,22 +1,33 @@
-import { MikroORM } from '@mikro-orm/core';
-import 'reflect-metadata';
-import { COOKIE__NAME, __prod__ } from './constants';
-import mikroConfig from './mikro-orm.config';
-import express from 'express';
-import cors from 'cors';
+
 import { ApolloServer } from 'apollo-server-express';
+import connectRedis from 'connect-redis';
+import cors from 'cors';
+import express from 'express';
+import session from 'express-session';
+import Redis from 'ioredis';
+import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
+import { createConnection } from 'typeorm';
+import { COOKIE__NAME, __prod__ } from './constants';
+import { Meeting } from './entities/Meeting';
+import { User } from './entities/User';
 import { HelloResolver } from './resolvers/hello';
 import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
-import Redis from 'ioredis';
-import session from 'express-session';
-import connectRedis from 'connect-redis';
 import { MyContext } from './types';
 
+
+
 const main = async () => {
-  const orm = await MikroORM.init(mikroConfig);
-  await orm.getMigrator().up();
+  const conn = await createConnection({
+    type: 'postgres',
+    database: 'capstone2',
+    username: 'postgres',
+    password: 'postgres',
+    logging: true,
+    synchronize: true,
+    entities: [Meeting, User],
+  })
 
   const app = express();
   app.use(
@@ -53,7 +64,7 @@ const main = async () => {
       resolvers: [HelloResolver, MeetingResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }): MyContext => ({ req, res, redis }),
   });
 
   apolloServer.applyMiddleware({ app, cors: false });

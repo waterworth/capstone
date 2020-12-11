@@ -8,12 +8,16 @@ import {useMeetingsQuery} from '../generated/graphql'
 const Index = () => {
   const [{data}] = useMeetingsQuery();
   return(
-    <div>
+    <main>
       <Nav/>
       {!data ? <div>Loading...</div> : data.meetings.map((meeting) => 
-        <div key={meeting.id}>{meeting.title}</div>
+        <section key={meeting.id}>
+          <h2>{meeting.title}</h2> 
+          <h3>Meeting is at: {meeting.timeslot}</h3>
+          <h3>Length of meeting: {meeting.length} hours</h3>
+        </section>
       )}
-    </div>
+    </main>
   )
 }
 

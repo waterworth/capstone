@@ -2,6 +2,7 @@ query Meetings {
   meetings{
     id
     title
+    length
     timeslot
     hostId
   }

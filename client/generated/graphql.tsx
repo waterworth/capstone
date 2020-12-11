@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -31,11 +33,13 @@ export type Meeting = {
   __typename?: 'Meeting';
   id: Scalars['Int'];
   title: Scalars['String'];
-  timeslot: Scalars['String'];
   hostId: Scalars['Float'];
+  timeslot: Scalars['DateTime'];
+  length: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
+
 
 export type User = {
   __typename?: 'User';
@@ -99,7 +103,8 @@ export type MutationLoginArgs = {
 
 export type MeetingInput = {
   title: Scalars['String'];
-  timeslot: Scalars['String'];
+  timeslot: Scalars['DateTime'];
+  length: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -118,6 +123,7 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
   email: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
 };
 
 export type RegularErrorFragment = (
@@ -127,7 +133,7 @@ export type RegularErrorFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email'>
+  & Pick<User, 'id' | 'username' | 'email' | 'isAdmin'>
 );
 
 export type RegularUserResponseFragment = (
@@ -231,7 +237,7 @@ export type MeetingsQuery = (
   { __typename?: 'Query' }
   & { meetings: Array<(
     { __typename?: 'Meeting' }
-    & Pick<Meeting, 'id' | 'title' | 'timeslot' | 'hostId'>
+    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'hostId'>
   )> }
 );
 
@@ -246,6 +252,7 @@ export const RegularUserFragmentDoc = gql`
   id
   username
   email
+  isAdmin
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -342,6 +349,7 @@ export const MeetingsDocument = gql`
   meetings {
     id
     title
+    length
     timeslot
     hostId
   }

@@ -1,49 +1,64 @@
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { withUrqlClient } from 'next-urql';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import Datetime from 'react-datetime';
+import 'react-datetime/css/react-datetime.css';
+import { number } from 'yup/lib/locale';
 import { useCreateMeetingMutation } from '../generated/graphql';
 import { createUrqlClient } from '../util/createUrqlClient';
 import { useIsAuth } from '../util/useIsAuth';
+
 
 const CreateMeeting: React.FC<{}> = ({}) => {
   const [, createMeeting] = useCreateMeetingMutation();
   const router = useRouter();
   useIsAuth();
-
   return (
     <div>
       <Formik
         initialValues={{
           title: '',
           timeslot: '',
+          length: number,
         }}
         onSubmit={async (values) => {
           const { error } = await createMeeting({ input: values });
           if (!error) {
             router.push('/');
           }
+          console.log(error);
         }}>
-        {({ errors, touched }) => (
+        {({ setFieldValue }) => (
           <Form>
+            {/* Title */}
             <label htmlFor='title'>Title:</label>
-            <Field name='title' placeholder='Title' />
+            <Field name='title' placeholder='Title' required/>
+            <br />
 
-            {errors.title && touched.title ? <div>{errors.title}</div> : null}
-
+            {/* Timeslot */}
             <label htmlFor='timeslot'>Timeslot:</label>
-            <Field name='timeslot' placeholder='timeslot' />
+            <Field
+              name='timeslot'
+              render={() => (
+                <Datetime
+                  onChange={(time) => {
+                    setFieldValue('timeslot', time.format('YYYY-MM-DD hh:mm:ss'));
+                  }}
+                />
+              )}
+            />
 
-            {errors.timeslot && touched.timeslot ? (
-              <div>{errors.timeslot}</div>
-            ) : null}
+            <label htmlFor="length">Length of Meeting(hr)</label>
+            <Field name="length" type="number" required></Field>
 
-            <button type='submit'>Login</button>
-            <Link href='/forgot-password'>Forgot Password?</Link>
+            {/* Submit */}
+            <button type='submit'>Create Meeting</button>
           </Form>
         )}
       </Formik>
+
+      <br />
     </div>
   );
 };

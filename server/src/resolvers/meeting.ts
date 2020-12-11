@@ -7,9 +7,11 @@ import { isAuth } from "../middleware/isAuth";
 @InputType()
 class MeetingInput{
   @Field()
-  title: string;
+  title!: string;
   @Field()
-  timeslot: string;
+  timeslot: Date;
+  @Field()
+  length: number;
 }
 @Resolver()
 export class MeetingResolver{

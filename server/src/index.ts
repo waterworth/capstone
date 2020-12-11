@@ -14,6 +14,7 @@ import { HelloResolver } from './resolvers/hello';
 import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
+import path from 'path';
 
 const main = async () => {
   const conn = await createConnection({
@@ -23,8 +24,10 @@ const main = async () => {
     password: 'postgres',
     logging: true,
     synchronize: true,
+    migrations: [path.join(__dirname, './migrations/*')],
     entities: [Meeting, User],
   });
+  
 
   const app = express();
   app.use(
@@ -33,6 +36,7 @@ const main = async () => {
       credentials: true,
     })
   );
+
 
   const RedisStore = connectRedis(session);
   const redis = new Redis();

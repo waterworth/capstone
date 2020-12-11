@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   Column,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Field, Int, ObjectType } from 'type-graphql';
 import { User } from './User';
@@ -23,14 +25,22 @@ export class Meeting extends BaseEntity {
 
   @Field()
   @Column()
-  timeslot!: string;
-
-  @Field()
-  @Column()
-  hostId: number;
+  hostId!: number;
 
   @ManyToOne(() => User, (user) => user.meetings)
-  host: User;
+  host!: User;
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  participants: User[]
+
+  @Field()
+  @Column({nullable: true})
+  timeslot!: Date;
+
+  @Field()
+  @Column({nullable: true})
+  length!: number;
 
   @Field(() => String)
   @CreateDateColumn()

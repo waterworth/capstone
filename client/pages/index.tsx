@@ -15,6 +15,7 @@ const Index = () => {
           <h2>{meeting.title}</h2> 
           <h3>Meeting is at: {meeting.timeslot}</h3>
           <h3>Length of meeting: {meeting.length} hours</h3>
+          <p>Meeting details: {meeting.description}</p>
         </section>
       )}
     </main>

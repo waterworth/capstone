@@ -22,6 +22,7 @@ export type Query = {
   meetings: Array<Meeting>;
   meeting?: Maybe<Meeting>;
   me?: Maybe<User>;
+  users: Array<User>;
 };
 
 
@@ -34,12 +35,13 @@ export type Meeting = {
   id: Scalars['Int'];
   title: Scalars['String'];
   hostId: Scalars['Float'];
+  host: User;
   timeslot: Scalars['DateTime'];
+  description: Scalars['String'];
   length: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
-
 
 export type User = {
   __typename?: 'User';
@@ -50,6 +52,7 @@ export type User = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -105,6 +108,7 @@ export type MeetingInput = {
   title: Scalars['String'];
   timeslot: Scalars['DateTime'];
   length: Scalars['Float'];
+  description: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -237,7 +241,22 @@ export type MeetingsQuery = (
   { __typename?: 'Query' }
   & { meetings: Array<(
     { __typename?: 'Meeting' }
-    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'hostId'>
+    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'description'>
+    & { host: (
+      { __typename?: 'User' }
+      & Pick<User, 'username' | 'email' | 'id'>
+    ) }
+  )> }
+);
+
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = (
+  { __typename?: 'Query' }
+  & { users: Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'email' | 'isAdmin'>
   )> }
 );
 
@@ -351,11 +370,30 @@ export const MeetingsDocument = gql`
     title
     length
     timeslot
-    hostId
+    host {
+      username
+      email
+      id
+    }
+    description
   }
 }
     `;
 
 export function useMeetingsQuery(options: Omit<Urql.UseQueryArgs<MeetingsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeetingsQuery>({ query: MeetingsDocument, ...options });
+};
+export const UsersDocument = gql`
+    query Users {
+  users {
+    id
+    username
+    email
+    isAdmin
+  }
+}
+    `;
+
+export function useUsersQuery(options: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<UsersQuery>({ query: UsersDocument, ...options });
 };

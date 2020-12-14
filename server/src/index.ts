@@ -6,7 +6,7 @@ import session from 'express-session';
 import Redis from 'ioredis';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
-import { createConnection } from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 import { COOKIE__NAME, __prod__ } from './constants';
 import { Meeting } from './entities/Meeting';
 import { User } from './entities/User';
@@ -27,6 +27,9 @@ const main = async () => {
     migrations: [path.join(__dirname, './migrations/*')],
     entities: [Meeting, User],
   });
+
+  // await Meeting.delete({});
+
   
 
   const app = express();

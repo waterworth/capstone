@@ -27,16 +27,22 @@ export class Meeting extends BaseEntity {
   @Column()
   hostId!: number;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.meetings)
   host!: User;
 
   @ManyToMany(() => User)
   @JoinTable()
-  participants: User[]
+  participants: User
 
   @Field()
   @Column({nullable: true})
   timeslot!: Date;
+
+
+  @Field()
+  @Column({nullable: true})
+  description: string;
 
   @Field()
   @Column({nullable: true})

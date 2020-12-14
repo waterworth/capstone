@@ -4,6 +4,11 @@ query Meetings {
     title
     length
     timeslot
-    hostId
+    host{
+      username
+      email
+      id
+    } 
+    description
   }
 }

@@ -2,13 +2,11 @@ import { MyContext } from "../types";
 import { MiddlewareFn } from "type-graphql";
 import { User } from "../entities/User";
 
-export const isAuth: MiddlewareFn<MyContext> = ({context}, next) => {
+export const isAuth: MiddlewareFn<MyContext> = async ({context}, next) => {
     
-    async function getUserDetails (){
-        const details = await User.findOne(context.req.session.userID)
-        console.log("current logged in user: " + context.req.session.userID)
-        console.log("searched for user" + details.id)
+    const details = await User.findOne(context.req.session.userId)
+    if(!details?.isAdmin){
+        throw new Error ("Not authorized to add users to meetings")
     }
-    getUserDetails()
     return next();
 }

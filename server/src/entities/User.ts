@@ -1,17 +1,26 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from 'typeorm';
-import { Field, Int, ObjectType } from 'type-graphql';
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+  OneToMany,
+} from 'typeorm';
+import { Field, Field, Int, ObjectType } from 'type-graphql';
 import { Meeting } from './Meeting';
+import { MeetingDetails } from './MeetingDetails';
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity{
+export class User extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => Boolean)
   @Column()
-  isAdmin!: boolean; 
+  isAdmin!: boolean;
 
   @Field()
   @Column({ unique: true })
@@ -28,9 +37,8 @@ export class User extends BaseEntity{
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => Meeting, meeting => meeting.hostId)
+  @OneToMany(() => MeetingDetails, (md) => md.meeting)
   meetings: Meeting[];
-
 
   @Field(() => String)
   @UpdateDateColumn()

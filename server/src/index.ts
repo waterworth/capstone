@@ -10,11 +10,12 @@ import { createConnection, getConnection } from 'typeorm';
 import { COOKIE__NAME, __prod__ } from './constants';
 import { Meeting } from './entities/Meeting';
 import { User } from './entities/User';
-import { HelloResolver } from './resolvers/hello';
 import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
 import path from 'path';
+import { MeetingDetails } from './entities/MeetingDetails';
+import { MeetingDetailsResolver } from './resolvers/meetingdetails';
 
 const main = async () => {
   const conn = await createConnection({
@@ -25,12 +26,10 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Meeting, User],
+    entities: [Meeting, User, MeetingDetails],
   });
 
   // await Meeting.delete({});
-
-  
 
   const app = express();
   app.use(
@@ -39,7 +38,6 @@ const main = async () => {
       credentials: true,
     })
   );
-
 
   const RedisStore = connectRedis(session);
   const redis = new Redis();
@@ -65,7 +63,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, MeetingResolver, UserResolver],
+      resolvers: [MeetingDetailsResolver, MeetingResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }): MyContext => ({ req, res, redis }),

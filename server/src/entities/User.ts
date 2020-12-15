@@ -6,10 +6,14 @@ import {
   UpdateDateColumn,
   Column,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Field, Field, Int, ObjectType } from 'type-graphql';
 import { Meeting } from './Meeting';
-import { MeetingDetails } from './MeetingDetails';
+import { join } from 'path';
+import { MeetingUser } from './MeetingUser';
+// import { MeetingParticipants } from './MeetingParticipants';
 
 @ObjectType()
 @Entity()
@@ -30,6 +34,10 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email!: string;
 
+  @Field()
+  @Column()
+  image: string;
+
   @Column()
   password!: string;
 
@@ -37,9 +45,13 @@ export class User extends BaseEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => MeetingDetails, (md) => md.meeting)
-  meetings: Meeting[];
+  @ManyToMany(() => Meeting, (meeting) => meeting.users)
+  @JoinTable()
+  meetings!: Meeting;
 
+  // Change to many to many
+  // @OneToMany(() => MeetingParticipants, (md) => md.meeting)
+  // meetings: Meeting[];
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt: Date;

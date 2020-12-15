@@ -17,8 +17,6 @@ const CreateMeeting: React.FC<{}> = ({}) => {
   const router = useRouter();
   useIsAuth();
 
-  
-
   return (
     <div>
       <Formik
@@ -27,12 +25,12 @@ const CreateMeeting: React.FC<{}> = ({}) => {
           timeslot: '',
           length: number,
           description: '',
-          participants: userList,
+          users: [],
         }}
         onSubmit={async (values) => {
           const { error } = await createMeeting({ input: values });
           if (!error) {
-            console.log(values)
+            console.log(values);
             // router.push('/');
           }
           console.log(error);
@@ -61,8 +59,12 @@ const CreateMeeting: React.FC<{}> = ({}) => {
             <label htmlFor='length'>Length of Meeting(hr)</label>
             <Field name='length' type='number' required></Field>
             <label htmlFor='description'>Meeting details</label>
-            <Field as="textarea" name='description' type='textarea' required></Field>
-            <br/>
+            <Field
+              as='textarea'
+              name='description'
+              type='textarea'
+              required></Field>
+            <br />
 
             {/* Change this to add to meeting */}
             <label htmlFor='participants'>Add participants to meeting</label>
@@ -72,15 +74,18 @@ const CreateMeeting: React.FC<{}> = ({}) => {
             {!data ? (
               <p>Loading users...</p>
             ) : (
-              data.users.map((user) => 
-                <div 
-                key={user.id}
-                onClick={(e)=>{
-                  setUserList([...userList, e.target.textContent])
-                  console.log(userList)
-                }}
-                >{user.username}</div>
-              )
+              data.users.map((user) => (
+                <div
+                  key={user.id}
+                  onClick={(e) => {
+                    if (!userList.includes(e.target.textContent)) {
+                      setUserList([...userList, e.target.textContent]);
+                      setFieldValue('users', userList);
+                    }
+                  }}>
+                  {user.username}
+                </div>
+              ))
             )}
             {/* Submit */}
             <button type='submit'>Create Meeting</button>

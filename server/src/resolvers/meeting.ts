@@ -1,9 +1,10 @@
-import { User } from '../entities/User';
+import { MeetingUser } from '../entities/MeetingUser';
 import {
   Arg,
   Ctx,
   Field,
   InputType,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -11,7 +12,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Meeting } from '../entities/Meeting';
-import { MeetingDetails } from '../entities/MeetingDetails';
+// import { MeetingParticipants } from '../entities/MeetingParticipants';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types';
 @InputType()
@@ -24,6 +25,8 @@ class MeetingInput {
   length: number;
   @Field()
   description: string;
+  @Field(() => [String], { nullable: true })
+  users: string[];
 }
 
 @Resolver()

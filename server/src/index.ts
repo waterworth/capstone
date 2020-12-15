@@ -14,8 +14,9 @@ import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
 import path from 'path';
-import { MeetingDetails } from './entities/MeetingDetails';
-import { MeetingDetailsResolver } from './resolvers/meetingdetails';
+import { MeetingUser } from './entities/MeetingUser';
+// import { MeetingParticipants } from './entities/MeetingParticipants';
+// import { MeetingParticipantsResolver } from './resolvers/meetingparticipants';
 
 const main = async () => {
   const conn = await createConnection({
@@ -26,7 +27,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Meeting, User, MeetingDetails],
+    entities: [Meeting, User, MeetingUser],
   });
 
   // await Meeting.delete({});
@@ -63,7 +64,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [MeetingDetailsResolver, MeetingResolver, UserResolver],
+      resolvers: [MeetingResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }): MyContext => ({ req, res, redis }),

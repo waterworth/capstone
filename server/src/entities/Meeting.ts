@@ -7,10 +7,12 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MeetingDetails } from './MeetingDetails';
+import { MeetingUser } from './MeetingUser';
+// import { MeetingParticipants } from './MeetingParticipants';
 import { User } from './User';
 
 @ObjectType()
@@ -33,9 +35,8 @@ export class Meeting extends BaseEntity {
   host!: User;
 
   @Field()
-  @ManyToMany(() => MeetingDetails, (md) => md.user, { cascade: true })
-  @JoinTable()
-  participants!: User;
+  @Column({ array: true, nullable: true })
+  users!: string;
 
   @Field()
   @Column({ nullable: true })

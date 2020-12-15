@@ -18,7 +18,6 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
   meetings: Array<Meeting>;
   meeting?: Maybe<Meeting>;
   me?: Maybe<User>;
@@ -36,6 +35,7 @@ export type Meeting = {
   title: Scalars['String'];
   hostId: Scalars['Float'];
   host: User;
+  users: Scalars['String'];
   timeslot: Scalars['DateTime'];
   description: Scalars['String'];
   length: Scalars['Float'];
@@ -73,6 +73,7 @@ export type MutationCreateMeetingArgs = {
 
 
 export type MutationUpdateMeetingArgs = {
+  timeslot: Scalars['String'];
   title: Scalars['String'];
   id: Scalars['Float'];
 };
@@ -109,6 +110,7 @@ export type MeetingInput = {
   timeslot: Scalars['DateTime'];
   length: Scalars['Float'];
   description: Scalars['String'];
+  users?: Maybe<Array<Scalars['String']>>;
 };
 
 export type UserResponse = {

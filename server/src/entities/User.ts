@@ -1,18 +1,15 @@
+import { Field, Int, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
   Column,
-  OneToMany,
-  ManyToMany,
+  CreateDateColumn,
+  Entity,
   JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { Field, Field, Int, ObjectType } from 'type-graphql';
 import { Meeting } from './Meeting';
-import { join } from 'path';
-import { MeetingUser } from './MeetingUser';
 // import { MeetingParticipants } from './MeetingParticipants';
 
 @ObjectType()
@@ -33,10 +30,6 @@ export class User extends BaseEntity {
   @Field()
   @Column({ unique: true })
   email!: string;
-
-  @Field()
-  @Column()
-  image: string;
 
   @Column()
   password!: string;

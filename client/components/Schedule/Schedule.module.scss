@@ -1,0 +1,15 @@
+@use '../../styles/colors' as *;
+
+.schedule {
+  &__welcome {
+    margin: 3rem;
+    font-size: 1.5rem;
+  }
+}
+
+.meeting__block {
+  width: 30rem;
+  background-color: $lightblue-light2;
+  margin-left: 3rem;
+  border-left: 2.5rem solid $lightblue-dark2;
+}

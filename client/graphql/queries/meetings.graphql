@@ -1,14 +1,15 @@
 query Meetings {
-  meetings{
+  meetings {
     id
     title
     length
     timeslot
-    host{
+    host {
       username
       email
       id
-    } 
+    }
     description
+    users
   }
 }

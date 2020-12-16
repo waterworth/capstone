@@ -28,14 +28,14 @@ export class Meeting extends BaseEntity {
 
   @Field()
   @Column()
-  hostId!: number;
+  hostId: number;
 
   @Field()
   @ManyToOne(() => User, (user) => user.meetings)
-  host!: User;
+  host: User;
 
-  @Field()
-  @Column({ array: true, nullable: true })
+  @Field(() => [String])
+  @Column({ nullable: true })
   users!: string;
 
   @Field()

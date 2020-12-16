@@ -23,6 +23,8 @@ const Schedule: React.FC<ScheduleProps> = ({}) => {
             <h3>
               {meeting.timeslot} + {meeting.length}{' '}
             </h3>
+            <p>{meeting.description}</p>
+            <p>{meeting.users}</p>
           </section>
         ))
       )}

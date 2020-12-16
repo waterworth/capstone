@@ -1,6 +1,7 @@
 @use '../../styles/colors' as *;
 
 .sidebar {
+  z-index: 2;
   background-color: $cloud;
   width: 21.25rem;
   height: 100vh;

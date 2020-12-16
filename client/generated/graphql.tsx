@@ -35,7 +35,7 @@ export type Meeting = {
   title: Scalars['String'];
   hostId: Scalars['Float'];
   host: User;
-  users: Scalars['String'];
+  users: Array<Scalars['String']>;
   timeslot: Scalars['DateTime'];
   description: Scalars['String'];
   length: Scalars['Float'];
@@ -243,7 +243,7 @@ export type MeetingsQuery = (
   { __typename?: 'Query' }
   & { meetings: Array<(
     { __typename?: 'Meeting' }
-    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'description'>
+    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'description' | 'users'>
     & { host: (
       { __typename?: 'User' }
       & Pick<User, 'username' | 'email' | 'id'>
@@ -378,6 +378,7 @@ export const MeetingsDocument = gql`
       id
     }
     description
+    users
   }
 }
     `;

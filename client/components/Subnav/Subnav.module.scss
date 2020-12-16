@@ -1,9 +1,12 @@
 @use '../../styles/colors' as *;
 
 .subnav {
+  position: sticky;
+  top: 136px;
   width: 100%;
   display: flex;
   justify-content: space-between;
+  background-color: #fff;
   border-bottom: 1px solid $cloud;
 
   &__menu {

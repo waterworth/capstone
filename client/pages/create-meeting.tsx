@@ -11,7 +11,6 @@ import { useIsAuth } from '../util/useIsAuth';
 
 const CreateMeeting: React.FC<{}> = ({}) => {
   const [userList, setUserList] = useState([]);
-  const [userSearch, setUserSearch] = useState();
   const [, createMeeting] = useCreateMeetingMutation();
   const [{ data }] = useUsersQuery();
   const router = useRouter();
@@ -31,7 +30,7 @@ const CreateMeeting: React.FC<{}> = ({}) => {
           const { error } = await createMeeting({ input: values });
           if (!error) {
             console.log(values);
-            // router.push('/');
+            router.push('/');
           }
           console.log(error);
         }}>
@@ -43,10 +42,14 @@ const CreateMeeting: React.FC<{}> = ({}) => {
             <br />
             {/* Timeslot */}
             <label htmlFor='timeslot'>Timeslot:</label>
-            <Field
-              name='timeslot'
-              render={() => (
+            <Field name='timeslot'>
+              {(field, form, meta) => (
                 <Datetime
+                  initialValue={new Date()}
+                  timeConstraints={{
+                    hours: { min: 9, max: 15, step: 2 },
+                    minutes: { min: 0, max: 45, step: 15 },
+                  }}
                   onChange={(time) => {
                     setFieldValue(
                       'timeslot',
@@ -55,7 +58,7 @@ const CreateMeeting: React.FC<{}> = ({}) => {
                   }}
                 />
               )}
-            />
+            </Field>
             <label htmlFor='length'>Length of Meeting(hr)</label>
             <Field name='length' type='number' required></Field>
             <label htmlFor='description'>Meeting details</label>
@@ -68,9 +71,6 @@ const CreateMeeting: React.FC<{}> = ({}) => {
 
             {/* Change this to add to meeting */}
             <label htmlFor='participants'>Add participants to meeting</label>
-            <Field
-              onChange={(e: any) => setUserSearch(e.target.value)}
-              name='participants'></Field>
             {!data ? (
               <p>Loading users...</p>
             ) : (
@@ -78,10 +78,11 @@ const CreateMeeting: React.FC<{}> = ({}) => {
                 <div
                   key={user.id}
                   onClick={(e) => {
-                    if (!userList.includes(e.target.textContent)) {
-                      setUserList([...userList, e.target.textContent]);
-                      setFieldValue('users', userList);
-                    }
+                    // if (!userList.includes(e.target.innerText)) {
+                    setUserList([...userList, e.target.innerText]);
+                    setFieldValue('users', userList);
+                    console.log(userList);
+                    // }
                   }}>
                   {user.username}
                 </div>

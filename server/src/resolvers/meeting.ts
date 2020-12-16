@@ -26,7 +26,7 @@ class MeetingInput {
   @Field()
   description: string;
   @Field(() => [String], { nullable: true })
-  users: string[];
+  users: [string];
 }
 
 @Resolver()
@@ -41,23 +41,24 @@ export class MeetingResolver {
     const posts = await qb.getMany();
     return posts;
   }
-  // Create
   @Query(() => Meeting, { nullable: true })
-  meeting(@Arg('id') id: number): Promise<Meeting | undefined> {
-    const qb = getConnection()
-      .getRepository(Meeting)
-      .createQueryBuilder('meeting')
-      .innerJoinAndSelect('meeting.host', 'u', 'u.id = meeting."hostId"');
-    return qb.getOne();
+  async meeting(
+    @Arg('id', () => Int) id: number
+  ): Promise<Meeting | undefined> {
+    return Meeting.findOne(id);
   }
 
+  // Create
   @Mutation(() => Meeting)
   @UseMiddleware(isAuth)
   async createMeeting(
     @Arg('input') input: MeetingInput,
     @Ctx() { req }: MyContext
   ): Promise<Meeting> {
-    return Meeting.create({ ...input, hostId: req.session.userId }).save();
+    return Meeting.create({
+      ...input,
+      hostId: req.session.userId,
+    }).save();
   }
   // Update
   @Mutation(() => Meeting, { nullable: true })

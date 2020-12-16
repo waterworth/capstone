@@ -6,9 +6,7 @@ import { isServer } from '../../util/isServer';
 import styles from './Sidebar.module.scss';
 
 const Sidebar = () => {
-  const [{ data, fetching }] = useMeQuery({
-    pause: isServer(),
-  });
+  const [{ data, fetching }] = useMeQuery({});
 
   let body = null;
 

@@ -8,11 +8,9 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
 
     return (
-      <Container>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </Container>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     );
   }
 }

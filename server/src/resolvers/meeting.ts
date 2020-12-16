@@ -45,7 +45,7 @@ export class MeetingResolver {
   async meeting(
     @Arg('id', () => Int) id: number
   ): Promise<Meeting | undefined> {
-    return Meeting.findOne(id);
+    return Meeting.findOne(id, { relations: ['host'] });
   }
 
   // Create

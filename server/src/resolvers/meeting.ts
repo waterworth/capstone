@@ -62,26 +62,26 @@ export class MeetingResolver {
   }
   // Update
   @Mutation(() => Meeting, { nullable: true })
+  @UseMiddleware(isAuth)
   async updateMeeting(
-    @Arg('id') id: number,
-    @Arg('title', () => String) title: string,
-    @Arg('timeslot', () => String) timeslot: string
+    @Arg('id', () => Int) id: number,
+    @Arg('title') title: string,
+    @Arg('timeslot') timeslot: string,
+    @Arg('description') description: string
   ): Promise<Meeting | null> {
-    const meeting = await Meeting.findOne(id);
-    if (!meeting) {
-      return null;
-    }
-    if (typeof title !== 'undefined') {
-      await Meeting.update({ id }, { title });
-    }
-    if (typeof timeslot !== 'undefined') {
-      await Meeting.update({ id }, { timeslot });
-    }
-    return meeting;
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(Meeting)
+      .set({ title, timeslot, description })
+      .where('id = id')
+      .returning('*')
+      .execute();
+    return result.raw[0];
   }
   // Delete
   @Mutation(() => Boolean)
-  async deleteMeeting(@Arg('id') id: number): Promise<boolean> {
+  @UseMiddleware(isAuth)
+  async deleteMeeting(@Arg('id', () => Int) id: number): Promise<boolean> {
     try {
       await Meeting.delete(id);
     } catch {

@@ -1,0 +1,18 @@
+mutation UpdateMeeting(
+  $id: Int!
+  $title: String!
+  $timeslot: String!
+  $description: String!
+) {
+  updateMeeting(
+    id: $id
+    title: $title
+    timeslot: $timeslot
+    description: $description
+  ) {
+    id
+    title
+    timeslot
+    description
+  }
+}

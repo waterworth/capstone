@@ -26,7 +26,7 @@ export type Query = {
 
 
 export type QueryMeetingArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 export type Meeting = {
@@ -73,14 +73,15 @@ export type MutationCreateMeetingArgs = {
 
 
 export type MutationUpdateMeetingArgs = {
+  description: Scalars['String'];
   timeslot: Scalars['String'];
   title: Scalars['String'];
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationDeleteMeetingArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
@@ -180,6 +181,16 @@ export type CreateMeetingMutation = (
   ) }
 );
 
+export type DeleteMeetingMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteMeetingMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteMeeting'>
+);
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -223,6 +234,22 @@ export type RegisterMutation = (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
   ) }
+);
+
+export type UpdateMeetingMutationVariables = Exact<{
+  id: Scalars['Int'];
+  title: Scalars['String'];
+  timeslot: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type UpdateMeetingMutation = (
+  { __typename?: 'Mutation' }
+  & { updateMeeting?: Maybe<(
+    { __typename?: 'Meeting' }
+    & Pick<Meeting, 'id' | 'title' | 'timeslot' | 'description'>
+  )> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -314,6 +341,15 @@ export const CreateMeetingDocument = gql`
 export function useCreateMeetingMutation() {
   return Urql.useMutation<CreateMeetingMutation, CreateMeetingMutationVariables>(CreateMeetingDocument);
 };
+export const DeleteMeetingDocument = gql`
+    mutation DeleteMeeting($id: Int!) {
+  deleteMeeting(id: $id)
+}
+    `;
+
+export function useDeleteMeetingMutation() {
+  return Urql.useMutation<DeleteMeetingMutation, DeleteMeetingMutationVariables>(DeleteMeetingDocument);
+};
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -353,6 +389,25 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateMeetingDocument = gql`
+    mutation UpdateMeeting($id: Int!, $title: String!, $timeslot: String!, $description: String!) {
+  updateMeeting(
+    id: $id
+    title: $title
+    timeslot: $timeslot
+    description: $description
+  ) {
+    id
+    title
+    timeslot
+    description
+  }
+}
+    `;
+
+export function useUpdateMeetingMutation() {
+  return Urql.useMutation<UpdateMeetingMutation, UpdateMeetingMutationVariables>(UpdateMeetingDocument);
 };
 export const MeDocument = gql`
     query Me {

@@ -1,15 +1,18 @@
 import React from 'react';
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../util/createUrqlClient';
-import { useMeetingsQuery } from '../generated/graphql';
-import Dashboard from '../components/Dashboard/Dashboard';
+import Header from '../Header/Header';
 
-const Index = () => {
-  const { data } = useMeetingsQuery();
+import styles from './Dashboard.module.scss';
+import { Subnav } from '../Subnav/Subnav';
+import Schedule from '../Schedule/Schedule';
+
+const Dashboard = () => {
+  //   const [{ data }] = useMeetingsQuery();
   return (
-    <>
-      <Dashboard />
+    <main className={styles.dashboard}>
+      <Header title='Dashboard' />
+      <Subnav />
 
+      <Schedule />
       {/* <Login /> */}
       {/* {!data ? (
         <div>Loading...</div>
@@ -23,8 +26,8 @@ const Index = () => {
           </section>
         ))
       )} */}
-    </>
+    </main>
   );
 };
 
-export default Index;
+export default Dashboard;

@@ -1,9 +1,9 @@
 query Meetings {
-  meetings{
+  meetings {
     id
     title
     length
     timeslot
-    hostId
+    description
   }
 }

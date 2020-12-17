@@ -1,15 +1,13 @@
+import { Field, Int, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
   Column,
+  CreateDateColumn,
+  Entity,
   ManyToOne,
-  ManyToMany,
-  JoinTable,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { Field, Int, ObjectType } from 'type-graphql';
 import { User } from './User';
 
 @ObjectType()
@@ -25,21 +23,26 @@ export class Meeting extends BaseEntity {
 
   @Field()
   @Column()
-  hostId!: number;
+  hostId: number;
 
+  @Field()
   @ManyToOne(() => User, (user) => user.meetings)
-  host!: User;
+  host: User;
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  participants: User[]
-
-  @Field()
-  @Column({nullable: true})
-  timeslot!: Date;
+  @Field(() => [String])
+  @Column({ nullable: true })
+  users!: string;
 
   @Field()
-  @Column({nullable: true})
+  @Column({ nullable: true })
+  timeslot!: string;
+
+  @Field()
+  @Column({ nullable: true })
+  description: string;
+
+  @Field()
+  @Column({ nullable: true })
   length!: number;
 
   @Field(() => String)

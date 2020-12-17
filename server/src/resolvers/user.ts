@@ -126,6 +126,11 @@ export class UserResolver {
     return User.findOne(req.session.userId);
   }
 
+  @Query(() => [User])
+  async users(): Promise<User[]> {
+    return User.find();
+  }
+
   @Mutation(() => UserResponse)
   async register(
     @Arg('options') options: UsernamePasswordInput,
@@ -150,10 +155,8 @@ export class UserResolver {
         })
         .returning('*')
         .execute();
-      console.log(result);
 
       user = result.raw[0];
-
     } catch (err) {
       //Duplicate username
       if (err.code === '23505') {
@@ -213,7 +216,7 @@ export class UserResolver {
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) =>
-      req.session.destroy((err) => {
+      req.session.destroy((err: any) => {
         res.clearCookie(COOKIE__NAME);
         if (err) {
           console.log(err);

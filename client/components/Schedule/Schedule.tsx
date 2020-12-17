@@ -8,12 +8,14 @@ interface ScheduleProps {}
 
 const Schedule: React.FC<ScheduleProps> = ({}) => {
   const { data } = useMeetingsQuery();
-
+  const date = new Date()
+    .toString()
+    .replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2, $3');
   return (
     <section className='schedule'>
-      <div className={styles.schedule__welcome}>
-        Good Morning! Here is your schedule for today!
-      </div>
+      <p className={styles.schedule__welcome}>
+        Good Morning! Today is {date}. Here is your schedule for today!
+      </p>
 
       <section className={styles.meeting__block_yellow}>
         <h2 className={styles.meeting__title}>Daily Standup</h2>

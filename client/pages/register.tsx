@@ -1,11 +1,11 @@
-import React from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { useRegisterMutation } from '../generated/graphql';
+import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
+import React from 'react';
+import * as Yup from 'yup';
+import Header from '../components/Header/Header';
+import { useRegisterMutation } from '../generated/graphql';
 import { toErrorMap } from '../util/toErrorMap';
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../util/createUrqlClient';
+import styles from '../styles/register.module.scss';
 
 interface RegisterProps {}
 
@@ -27,8 +27,8 @@ const Register: React.FC<RegisterProps> = ({}) => {
   const router = useRouter();
   const [register] = useRegisterMutation();
   return (
-    <div>
-      <h1>Signup</h1>
+    <main className={styles.register}>
+      <Header title='Register' />
       <Formik
         initialValues={{
           username: '',
@@ -47,33 +47,54 @@ const Register: React.FC<RegisterProps> = ({}) => {
           }
         }}>
         {({ errors, touched }) => (
-          <Form>
-            <label htmlFor='username'>Username:</label>
-            <Field name='username' placeholder='Username' />
+          <Form className={styles.register__form}>
+            <label className={styles.register__label} htmlFor='username'>
+              Username
+            </label>
+            <Field
+              className={styles.register__input}
+              name='username'
+              placeholder='Username'
+            />
 
             {errors.username && touched.username ? (
-              <div>{errors.username}</div>
+              <p className={styles.register__error}>{errors.username}</p>
             ) : null}
 
-            <label htmlFor='password'>Password:</label>
-            <Field name='password' placeholder='Password' type='password' />
+            <label className={styles.register__label} htmlFor='password'>
+              Password
+            </label>
+            <Field
+              className={styles.register__input}
+              name='password'
+              placeholder='Password'
+              type='password'
+            />
 
             {errors.password && touched.password ? (
-              <div>{errors.password}</div>
+              <p className={styles.register__error}>{errors.password}</p>
             ) : null}
 
-            <label htmlFor='email'>Email:</label>
-            <Field name='email' placeholder='email' />
+            <label className={styles.register__label} htmlFor='email'>
+              Email
+            </label>
+            <Field
+              className={styles.register__input}
+              name='email'
+              placeholder='Email'
+            />
 
             {errors.password && touched.password ? (
-              <div>{errors.email}</div>
+              <p className={styles.register__error}>{errors.email}</p>
             ) : null}
 
-            <button type='submit'>Register</button>
+            <button className={styles.register__button} type='submit'>
+              Register
+            </button>
           </Form>
         )}
       </Formik>
-    </div>
+    </main>
   );
 };
 

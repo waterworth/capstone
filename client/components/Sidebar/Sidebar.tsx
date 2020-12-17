@@ -1,4 +1,5 @@
 import { withUrqlClient } from 'next-urql';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import { createUrqlClient } from '../../util/createUrqlClient';
@@ -17,7 +18,9 @@ const Sidebar = () => {
     body = (
       <div className={styles.sidebar}>
         <div className={styles.sidebar__header}>
-          <img src='https://via.placeholder.com/46' alt='teamlogo' />
+          <Link href='/'>
+            <img src='https://via.placeholder.com/46' alt='teamlogo' />
+          </Link>
           <div className={styles.sidebar__seperator}> </div>
           <img src='https://via.placeholder.com/46' alt='userImage' />
           <div className={styles.sidebar__headerinfo}>

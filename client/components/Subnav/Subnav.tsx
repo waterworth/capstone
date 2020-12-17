@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import styles from './Subnav.module.scss';
 
@@ -14,7 +15,9 @@ export const Subnav: React.FC<SubnavProps> = ({}) => {
         <li className={styles.subnav__menuitem}>Meetings</li>
       </ul>
 
-      <button className={styles.button__new}>Create New Meeting</button>
+      <Link href='/create-meeting'>
+        <a className={styles.button__new}>Create New Meeting</a>
+      </Link>
     </nav>
   );
 };

@@ -21,4 +21,12 @@
       margin-right: 0;
     }
   }
+  &__link {
+    color: $black;
+    margin-left: 2rem;
+    &:hover {
+      color: $lightblue-dark2;
+      transition: color 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+  }
 }

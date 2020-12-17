@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Header.module.scss';
 
-const Header = () => {
+const Header = (props) => {
   return (
     <header className={styles.header}>
-      <h1 className={styles.header__title}>Dashboard</h1>
+      <h1 className={styles.header__title}>{props.title}</h1>
       <section className={styles.header__users}>
         <a className={styles.header__user}>
           <img src='https://via.placeholder.com/46' alt='userImage'></img>

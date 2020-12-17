@@ -22,14 +22,13 @@ const main = async () => {
     type: 'postgres',
     url: process.env.DATABASE_URL,
     logging: true,
-    //synchronize: true,
+    synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
     entities: [Meeting, User, MeetingUser],
   });
   // await conn.runMigrations();
 
   const app = express();
-  app.set('trust proxy', 1);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN,

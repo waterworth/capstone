@@ -7,9 +7,54 @@
   }
 }
 
-.meeting__block {
-  width: 30rem;
-  background-color: $lightblue-light2;
-  margin-left: 3rem;
-  border-left: 2.5rem solid $lightblue-dark2;
+.meeting {
+  &__block {
+    &_red {
+      width: 35rem;
+      margin-left: 3rem;
+      margin-bottom: 5rem;
+      border-radius: 0 1.5rem 1.5rem 0;
+      background-color: $red-light2;
+      border-left: 2.5rem solid $red-dark2;
+    }
+    &_black {
+      color: white;
+      width: 35rem;
+      margin-left: 3rem;
+      margin-bottom: 5rem;
+      border-radius: 0 1.5rem 1.5rem 0;
+      background-color: $black-light2;
+      border-left: 2.5rem solid $black-dark2;
+    }
+    &_blue {
+      width: 35rem;
+      margin-left: 3rem;
+      margin-bottom: 5rem;
+      border-radius: 0 1.5rem 1.5rem 0;
+      background-color: $lightblue-light2;
+      border-left: 2.5rem solid $lightblue-dark2;
+    }
+    &_yellow {
+      width: 35rem;
+      margin-left: 3rem;
+      margin-bottom: 5rem;
+      border-radius: 0 1.5rem 1.5rem 0;
+      background-color: $yellow-light2;
+      border-left: 2.5rem solid $yellow-dark2;
+    }
+    &_pink {
+      width: 35rem;
+      margin-left: 3rem;
+      margin-bottom: 5rem;
+      border-radius: 0 1.5rem 1.5rem 0;
+      background-color: $pink-light2;
+      border-left: 2.5rem solid $pink-dark2;
+    }
+  }
+  &__title {
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  }
+  &__timeslot {
+    padding: 0 1.5rem 5rem 1.5rem;
+  }
 }

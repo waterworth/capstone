@@ -9,7 +9,7 @@ const Dashboard = () => {
   //   const [{ data }] = useMeetingsQuery();
   return (
     <main className={styles.dashboard}>
-      <Header />
+      <Header title='Dashboard' />
       <Subnav />
 
       <Schedule />

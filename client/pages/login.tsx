@@ -1,12 +1,12 @@
 import { Field, Form, Formik } from 'formik';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
+import Header from '../components/Header/Header';
 import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../util/toErrorMap';
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../util/createUrqlClient';
-import Link from 'next/link';
+import styles from '../styles/login.module.scss';
 
 interface LoginProps {}
 
@@ -22,12 +22,12 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const Login: React.FC<LoginProps> = ({}) => {
+const Login: React.FC<LoginProps> = (props) => {
   const router = useRouter();
   const [login] = useLoginMutation();
   return (
-    <div>
-      <h1>Login</h1>
+    <div className={styles.login}>
+      <Header title='Login' />
       <Formik
         initialValues={{
           usernameOrEmail: '',
@@ -47,23 +47,40 @@ const Login: React.FC<LoginProps> = ({}) => {
           }
         }}>
         {({ errors, touched }) => (
-          <Form>
-            <label htmlFor='username'>Username:</label>
-            <Field name='usernameOrEmail' placeholder='Username or Email' />
+          <Form className={styles.login__form}>
+            <label className={styles.login__label} htmlFor='username'>
+              Username
+            </label>
+            <Field
+              className={styles.login__input}
+              name='usernameOrEmail'
+              placeholder='Username or Email'
+            />
 
             {errors.usernameOrEmail && touched.usernameOrEmail ? (
-              <div>{errors.usernameOrEmail}</div>
+              <p className={styles.login__error}>{errors.usernameOrEmail}</p>
             ) : null}
 
-            <label htmlFor='password'>Password:</label>
-            <Field name='password' placeholder='Password' type='password' />
+            <label className={styles.login__label} htmlFor='password'>
+              Password
+            </label>
+            <Field
+              className={styles.login__input}
+              name='password'
+              placeholder='Password'
+              type='password'
+            />
 
             {errors.password && touched.password ? (
-              <div>{errors.password}</div>
+              <p className={styles.login__error}>{errors.password}</p>
             ) : null}
 
-            <button type='submit'>Login</button>
-            <Link href='/forgot-password'>Forgot Password?</Link>
+            <button className={styles.login__button} type='submit'>
+              Login
+            </button>
+            <Link href='/forgot-password'>
+              <a className={styles.login__link}>Forgot password?</a>
+            </Link>
           </Form>
         )}
       </Formik>

@@ -51,7 +51,7 @@ const Sidebar = () => {
           <div className={styles.sidebar__headerinfo}>
             <h2 className={styles.sidebar__infoname}>{data.me.username}</h2>
             <p className={styles.sidebar__inforole}>
-              {data.me.isAdmin ? 'Administrator' : 'User'}
+              {data.me.isAdmin ? 'Administrator' : null}
             </p>
           </div>
         </div>

@@ -8,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import { MeetingParticipants } from './MeetingParticipants';
 import { User } from './User';
 
 @ObjectType()
@@ -36,7 +35,7 @@ export class Meeting extends BaseEntity {
 
   @Field()
   @Column({ nullable: true })
-  timeslot!: Date;
+  timeslot!: string;
 
   @Field()
   @Column({ nullable: true })

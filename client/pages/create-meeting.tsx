@@ -58,7 +58,7 @@ const CreateMeeting: React.FC<{}> = ({}) => {
                     minutes: { min: 0, max: 45, step: 15 },
                   }}
                   onChange={(time) => {
-                    setFieldValue('timeslot', time.format('x'));
+                    setFieldValue('timeslot', time.format('MM/DD/YYYY HH:MM'));
                   }}
                 />
               )}

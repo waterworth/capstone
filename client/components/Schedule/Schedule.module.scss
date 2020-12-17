@@ -1,8 +1,11 @@
 @use '../../styles/colors' as *;
 
 .schedule {
+  display: flex;
+  flex-direction: row;
   &__welcome {
     margin: 3rem;
+    width: 40rem;
     font-size: 1.5rem;
   }
 }
@@ -56,5 +59,35 @@
   }
   &__timeslot {
     padding: 0 1.5rem 5rem 1.5rem;
+  }
+}
+
+.meetingdetails {
+  box-shadow: 0 1px 18px -5px rgba(35, 33, 33, 0.25);
+  flex-basis: fill;
+  margin-right: 3rem;
+  border-top: 0.5rem solid $lightblue-dark2;
+  overflow: scroll;
+  &__title {
+    margin: 0;
+    padding: 2rem;
+    border-bottom: solid 1px $cloud;
+  }
+  &__section {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid $cloud;
+  }
+  &__image {
+    padding-right: 0.5rem;
+  }
+  &__subtitle {
+    font-size: 0.8rem;
+  }
+  &__linkcontainer {
+    display: flex;
+    align-items: center;
+  }
+  &__link {
+    color: $lightblue-dark2;
   }
 }

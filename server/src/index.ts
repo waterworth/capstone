@@ -17,21 +17,20 @@ import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
 import { createHostLoader } from './util/createHostLoader';
-// import { MeetingParticipants } from './entities/MeetingParticipants';
-// import { MeetingParticipantsResolver } from './resolvers/meetingparticipants';
 
 const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
     logging: true,
-    synchronize: true,
+    //synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
     entities: [Meeting, User, MeetingUser],
   });
   await conn.runMigrations();
 
   const app = express();
+  app.set('proxy', 1);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN,

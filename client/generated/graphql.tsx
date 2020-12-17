@@ -12,8 +12,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
 };
 
 export type Query = {
@@ -35,8 +33,8 @@ export type Meeting = {
   title: Scalars['String'];
   hostId: Scalars['Float'];
   host: User;
-  users: Array<Scalars['String']>;
-  timeslot: Scalars['DateTime'];
+  userIds: Scalars['String'];
+  timeslot: Scalars['String'];
   description: Scalars['String'];
   length: Scalars['Float'];
   createdAt: Scalars['String'];
@@ -52,7 +50,6 @@ export type User = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
-
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -108,10 +105,10 @@ export type MutationLoginArgs = {
 
 export type MeetingInput = {
   title: Scalars['String'];
-  timeslot: Scalars['DateTime'];
+  timeslot: Scalars['String'];
   length: Scalars['Float'];
   description: Scalars['String'];
-  users?: Maybe<Array<Scalars['String']>>;
+  userIds: Array<Scalars['String']>;
 };
 
 export type UserResponse = {
@@ -270,7 +267,7 @@ export type MeetingsQuery = (
   { __typename?: 'Query' }
   & { meetings: Array<(
     { __typename?: 'Meeting' }
-    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'description' | 'users'>
+    & Pick<Meeting, 'id' | 'title' | 'length' | 'timeslot' | 'userIds' | 'description'>
     & { host: (
       { __typename?: 'User' }
       & Pick<User, 'username' | 'email' | 'id'>
@@ -427,13 +424,13 @@ export const MeetingsDocument = gql`
     title
     length
     timeslot
+    userIds
     host {
       username
       email
       id
     }
     description
-    users
   }
 }
     `;

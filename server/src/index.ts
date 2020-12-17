@@ -4,17 +4,19 @@ import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import Redis from 'ioredis';
+import path from 'path';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
-import { createConnection, getConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import { COOKIE__NAME, __prod__ } from './constants';
 import { Meeting } from './entities/Meeting';
+import { MeetingUser } from './entities/MeetingUser';
 import { User } from './entities/User';
 import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
-import path from 'path';
-import { MeetingUser } from './entities/MeetingUser';
+import { createHostLoader } from './util/createHostLoader';
+import { createUserLoader } from './util/createUserLoader';
 // import { MeetingParticipants } from './entities/MeetingParticipants';
 // import { MeetingParticipantsResolver } from './resolvers/meetingparticipants';
 
@@ -29,7 +31,6 @@ const main = async () => {
     migrations: [path.join(__dirname, './migrations/*')],
     entities: [Meeting, User, MeetingUser],
   });
-
   // await Meeting.delete({});
 
   const app = express();
@@ -67,7 +68,13 @@ const main = async () => {
       resolvers: [MeetingResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ req, res, redis }),
+    context: ({ req, res }): MyContext => ({
+      req,
+      res,
+      redis,
+      hostLoader: createHostLoader(),
+      userLoader: createUserLoader(),
+    }),
   });
 
   apolloServer.applyMiddleware({ app, cors: false });

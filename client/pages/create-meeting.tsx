@@ -5,7 +5,11 @@ import React, { useEffect, useState } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { number } from 'yup/lib/locale';
-import { useCreateMeetingMutation, useUsersQuery } from '../generated/graphql';
+import {
+  useCreateMeetingMutation,
+  useMeQuery,
+  useUsersQuery,
+} from '../generated/graphql';
 import { createUrqlClient } from '../util/createUrqlClient';
 import { useIsAuth } from '../util/useIsAuth';
 
@@ -13,6 +17,7 @@ const CreateMeeting: React.FC<{}> = ({}) => {
   const [userList, setUserList] = useState([]);
   const [, createMeeting] = useCreateMeetingMutation();
   const [{ data }] = useUsersQuery();
+  const [{ data: medata }] = useMeQuery();
   const router = useRouter();
   useIsAuth();
 
@@ -24,9 +29,10 @@ const CreateMeeting: React.FC<{}> = ({}) => {
           timeslot: '',
           length: number,
           description: '',
-          users: [],
+          userIds: [medata?.me?.id],
         }}
         onSubmit={async (values) => {
+          console.log(values);
           const { error } = await createMeeting({ input: values });
           if (!error) {
             console.log(values);
@@ -51,10 +57,7 @@ const CreateMeeting: React.FC<{}> = ({}) => {
                     minutes: { min: 0, max: 45, step: 15 },
                   }}
                   onChange={(time) => {
-                    setFieldValue(
-                      'timeslot',
-                      time.format('YYYY-MM-DD hh:mm:ss')
-                    );
+                    setFieldValue('timeslot', time.format('x'));
                   }}
                 />
               )}
@@ -78,11 +81,8 @@ const CreateMeeting: React.FC<{}> = ({}) => {
                 <div
                   key={user.id}
                   onClick={(e) => {
-                    // if (!userList.includes(e.target.innerText)) {
-                    setUserList([...userList, e.target.innerText]);
-                    setFieldValue('users', userList);
-                    console.log(userList);
-                    // }
+                    setUserList([...userList, user.id]);
+                    setFieldValue('userIds', userList);
                   }}>
                   {user.username}
                 </div>

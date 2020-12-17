@@ -4,13 +4,11 @@ import React from 'react';
 import * as Yup from 'yup';
 import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../util/toErrorMap';
-import { withUrqlClient} from 'next-urql';
+import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../util/createUrqlClient';
 import Link from 'next/link';
 
 interface LoginProps {}
-
-
 
 const SignupSchema = Yup.object().shape({
   usernameOrEmail: Yup.string()
@@ -38,14 +36,13 @@ const Login: React.FC<LoginProps> = ({}) => {
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
           const response = await login(values);
-          if(response.data?.login.errors){
-            console.log(toErrorMap(response.data.login.errors))
-          } else if (response.data?.login.user){
-            if(typeof router.query.next === 'string'){
-              router.push(router.query.next)
-            }
-            else{
-              router.push('/')
+          if (response.data?.login.errors) {
+            console.log(toErrorMap(response.data.login.errors));
+          } else if (response.data?.login.user) {
+            if (typeof router.query.next === 'string') {
+              router.push(router.query.next);
+            } else {
+              router.push('/');
             }
           }
         }}>
@@ -66,9 +63,7 @@ const Login: React.FC<LoginProps> = ({}) => {
             ) : null}
 
             <button type='submit'>Login</button>
-            <Link href="/forgot-password">
-                Forgot Password?
-              </Link> 
+            <Link href='/forgot-password'>Forgot Password?</Link>
           </Form>
         )}
       </Formik>

@@ -127,9 +127,9 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-    async users(): Promise<User[]> {
-      return User.find();  
-    }
+  async users(): Promise<User[]> {
+    return User.find();
+  }
 
   @Mutation(() => UserResponse)
   async register(
@@ -155,10 +155,8 @@ export class UserResolver {
         })
         .returning('*')
         .execute();
-      console.log(result);
 
       user = result.raw[0];
-
     } catch (err) {
       //Duplicate username
       if (err.code === '23505') {

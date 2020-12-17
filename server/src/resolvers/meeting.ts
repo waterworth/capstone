@@ -1,17 +1,19 @@
-import { MeetingUser } from '../entities/MeetingUser';
 import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   InputType,
   Int,
   Mutation,
   Query,
   Resolver,
+  Root,
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Meeting } from '../entities/Meeting';
+import { User } from '../entities/User';
 // import { MeetingParticipants } from '../entities/MeetingParticipants';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types';
@@ -20,32 +22,45 @@ class MeetingInput {
   @Field()
   title!: string;
   @Field()
-  timeslot: Date;
+  timeslot: string;
   @Field()
   length: number;
   @Field()
   description: string;
-  @Field(() => [String], { nullable: true })
-  users: [string];
+  @Field(() => [Int])
+  userIds: number[][];
 }
 
-@Resolver()
+@Resolver(Meeting)
 export class MeetingResolver {
+  @FieldResolver(() => User)
+  host(@Root() meeting: Meeting, @Ctx() { hostLoader }: MyContext) {
+    return hostLoader.load(meeting.hostId);
+  }
+
+  @FieldResolver(() => User)
+  async users(@Root() meeting: Meeting, @Ctx() { userLoader }: MyContext) {
+    return userLoader.load(meeting.userIds);
+  }
+
   // Read
   @Query(() => [Meeting])
   async meetings(): Promise<Meeting[]> {
-    const qb = getConnection()
-      .getRepository(Meeting)
-      .createQueryBuilder('meeting')
-      .innerJoinAndSelect('meeting.host', 'u', 'u.id = meeting."hostId"');
-    const posts = await qb.getMany();
+    const posts = await getConnection().query(
+      `
+    select *
+    from meeting
+    order by meeting."timeslot"
+    `
+    );
     return posts;
   }
+
   @Query(() => Meeting, { nullable: true })
   async meeting(
     @Arg('id', () => Int) id: number
   ): Promise<Meeting | undefined> {
-    return Meeting.findOne(id, { relations: ['host'] });
+    return Meeting.findOne(id);
   }
 
   // Create
@@ -73,7 +88,9 @@ export class MeetingResolver {
       .createQueryBuilder()
       .update(Meeting)
       .set({ title, timeslot, description })
-      .where('id = id')
+      .where('id = :id', {
+        id,
+      })
       .returning('*')
       .execute();
     return result.raw[0];

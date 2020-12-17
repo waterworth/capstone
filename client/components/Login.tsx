@@ -2,10 +2,12 @@ import Link from 'next/link';
 import React from 'react';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../util/isServer';
+import { useRouter } from 'next/router';
 
 interface LoginProps {}
 
 const Login = ({}) => {
+  const router = useRouter();
   const [, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
@@ -30,8 +32,9 @@ const Login = ({}) => {
       <>
         <h1>Welcome {data.me.username}</h1>
         <button
-          onClick={() => {
-            logout();
+          onClick={async () => {
+            await logout();
+            router.reload();
           }}>
           {' '}
           Logout

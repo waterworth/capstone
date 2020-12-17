@@ -1,10 +1,4 @@
-import {
-  BaseEntity,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { BaseEntity, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Meeting } from './Meeting';
 import { User } from './User';
 

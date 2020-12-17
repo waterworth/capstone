@@ -38,10 +38,10 @@ export class MeetingResolver {
     return hostLoader.load(meeting.hostId);
   }
 
-  @FieldResolver(() => User)
-  async users(@Root() meeting: Meeting, @Ctx() { userLoader }: MyContext) {
-    return userLoader.load(meeting.userIds);
-  }
+  // @FieldResolver(() => User)
+  // async users(@Root() meeting: Meeting, @Ctx() { userLoader }: MyContext) {
+  //   return userLoader.load(meeting.userIds);
+  // }
 
   // Read
   @Query(() => [Meeting])

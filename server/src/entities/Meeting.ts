@@ -4,14 +4,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MeetingUser } from './MeetingUser';
 // import { MeetingParticipants } from './MeetingParticipants';
 import { User } from './User';
 

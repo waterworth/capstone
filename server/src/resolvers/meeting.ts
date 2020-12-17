@@ -44,10 +44,16 @@ export class MeetingResolver {
   // }
 
   // Read
-  // Read
   @Query(() => [Meeting])
   async meetings(): Promise<Meeting[]> {
-    return Meeting.find();
+    const posts = await getConnection().query(
+      `
+    select *
+    from meeting
+    order by meeting."timeslot"
+    `
+    );
+    return posts;
   }
 
   @Query(() => Meeting, { nullable: true })

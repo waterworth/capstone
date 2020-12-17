@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { array } from 'yup/lib/locale';
 import { useMeetingsQuery } from '../../generated/graphql';
 import styles from './Schedule.module.scss';
 
@@ -8,7 +7,7 @@ interface ScheduleProps {}
 
 const Schedule: React.FC<ScheduleProps> = ({}) => {
   const [meetingDetails, setMeetingDetails] = useState();
-  const { data, error, loading } = useMeetingsQuery();
+  const { data } = useMeetingsQuery();
   const date = new Date()
     .toString()
     .replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/, '$1 $2, $3');
@@ -23,7 +22,6 @@ const Schedule: React.FC<ScheduleProps> = ({}) => {
         <p className={styles.schedule__welcome}>
           Good Morning! Today is {date}. Here are your upcoming events!
         </p>
-        {console.log({ data })}
         {!data ? (
           <div> Loading ... </div>
         ) : (

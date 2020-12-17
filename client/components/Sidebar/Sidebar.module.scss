@@ -56,6 +56,15 @@
     }
     padding-bottom: 3rem;
   }
+  &__logout {
+    border: none;
+    font-size: 1rem;
+    background-color: $red-light1;
+    color: $cloud;
+    margin: 3rem;
+    border-radius: 0.4rem;
+    padding: 0.5rem 1rem;
+  }
 }
 
 .active {

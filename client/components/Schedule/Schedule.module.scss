@@ -64,7 +64,9 @@
 
 .meetingdetails {
   box-shadow: 0 1px 18px -5px rgba(35, 33, 33, 0.25);
-  flex-basis: fill;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
   margin-right: 3rem;
   border-top: 0.5rem solid $lightblue-dark2;
   overflow: scroll;

@@ -7,6 +7,7 @@ import Header from '../components/Header/Header';
 import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../util/toErrorMap';
 import styles from '../styles/login.module.scss';
+import { useApolloClient } from '@apollo/client';
 
 interface LoginProps {}
 
@@ -25,6 +26,7 @@ const SignupSchema = Yup.object().shape({
 const Login: React.FC<LoginProps> = (props) => {
   const router = useRouter();
   const [login] = useLoginMutation();
+  const apolloClient = useApolloClient();
   return (
     <div className={styles.login}>
       <Header title='Login' />
@@ -43,6 +45,7 @@ const Login: React.FC<LoginProps> = (props) => {
               router.push(router.query.next);
             } else {
               router.push('/');
+              await apolloClient.resetStore();
             }
           }
         }}>

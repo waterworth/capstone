@@ -3,6 +3,9 @@ Capstone for Brainstation Fall 2020
 
 To run
 ------
+
+`redis-server`
+
 ` cd client/ && npm run dev`
 
 `$ cd server/ && npm run dev`

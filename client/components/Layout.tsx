@@ -2,7 +2,7 @@ import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../util/createUrqlClient';
 import Sidebar from './Sidebar/Sidebar';
 
-function Layout(props) {
+function Layout(props: any) {
   return (
     <div className='page-layout'>
       <Sidebar />

@@ -6,12 +6,12 @@ import { isServer } from '../../util/isServer';
 import styles from './Sidebar.module.scss';
 
 const Sidebar = () => {
-  const [{ data, fetching }] = useMeQuery({});
+  const { data, loading } = useMeQuery({});
 
   let body = null;
 
   //loading
-  if (fetching) {
+  if (loading) {
     // not logged in
   } else if (!data?.me) {
     body = (
@@ -69,4 +69,4 @@ const Sidebar = () => {
   return <>{body}</>;
 };
 
-export default withUrqlClient(createUrqlClient)(Sidebar);
+export default Sidebar;

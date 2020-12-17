@@ -1,23 +1,22 @@
 import { Field, Form, Formik } from 'formik';
-import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import { number } from 'yup/lib/locale';
 import {
+  MeetingInput,
   useCreateMeetingMutation,
   useMeQuery,
   useUsersQuery,
 } from '../generated/graphql';
-import { createUrqlClient } from '../util/createUrqlClient';
 import { useIsAuth } from '../util/useIsAuth';
 
 const CreateMeeting: React.FC<{}> = ({}) => {
   const [userList, setUserList] = useState([]);
-  const [, createMeeting] = useCreateMeetingMutation();
-  const [{ data }] = useUsersQuery();
-  const [{ data: medata }] = useMeQuery();
+  const [createMeeting] = useCreateMeetingMutation();
+  const { data } = useUsersQuery();
+  const { data: medata } = useMeQuery();
   const router = useRouter();
   useIsAuth();
 
@@ -33,12 +32,14 @@ const CreateMeeting: React.FC<{}> = ({}) => {
         }}
         onSubmit={async (values) => {
           console.log(values);
-          const { error } = await createMeeting({ input: values });
-          if (!error) {
+          const { errors } = await createMeeting({
+            variables: { input: values },
+          });
+          if (!errors) {
             console.log(values);
             router.push('/');
           }
-          console.log(error);
+          console.log(errors);
         }}>
         {({ setFieldValue }) => (
           <Form>
@@ -99,4 +100,4 @@ const CreateMeeting: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CreateMeeting);
+export default CreateMeeting;

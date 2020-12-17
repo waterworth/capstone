@@ -24,7 +24,7 @@ const SignupSchema = Yup.object().shape({
 
 const Login: React.FC<LoginProps> = ({}) => {
   const router = useRouter();
-  const [, login] = useLoginMutation();
+  const [login] = useLoginMutation();
   return (
     <div>
       <h1>Login</h1>
@@ -35,7 +35,7 @@ const Login: React.FC<LoginProps> = ({}) => {
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
-          const response = await login(values);
+          const response = await login({ variables: values });
           if (response.data?.login.errors) {
             console.log(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.user) {
@@ -71,4 +71,4 @@ const Login: React.FC<LoginProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Login);
+export default Login;

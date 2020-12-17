@@ -5,7 +5,7 @@ import { useMeetingsQuery } from '../generated/graphql';
 import Dashboard from '../components/Dashboard/Dashboard';
 
 const Index = () => {
-  const [{ data }] = useMeetingsQuery();
+  const { data } = useMeetingsQuery();
   return (
     <>
       <Dashboard />
@@ -27,4 +27,4 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default Index;

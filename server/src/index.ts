@@ -15,7 +15,6 @@ import { MeetingUser } from './entities/MeetingUser';
 import { User } from './entities/User';
 import { MeetingResolver } from './resolvers/meeting';
 import { UserResolver } from './resolvers/user';
-import { MyContext } from './types';
 import { createHostLoader } from './util/createHostLoader';
 
 const main = async () => {
@@ -27,10 +26,10 @@ const main = async () => {
     migrations: [path.join(__dirname, './migrations/*')],
     entities: [Meeting, User, MeetingUser],
   });
-  await conn.runMigrations();
+  // await conn.runMigrations();
 
   const app = express();
-  app.set('proxy', 1);
+  app.set('trust proxy', 1);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN,
@@ -78,7 +77,7 @@ const main = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(parseInt(process.env.PORT), () => {
-    console.log('Server started on localhost:8080');
+    console.log('Server started on localhost:', process.env.PORT);
   });
 };
 

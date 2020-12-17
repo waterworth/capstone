@@ -7,7 +7,7 @@ import styles from './Schedule.module.scss';
 interface ScheduleProps {}
 
 const Schedule: React.FC<ScheduleProps> = ({}) => {
-  const [{ data }] = useMeetingsQuery();
+  const { data } = useMeetingsQuery();
 
   return (
     <section className='schedule'>
@@ -32,4 +32,4 @@ const Schedule: React.FC<ScheduleProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Schedule);
+export default Schedule;

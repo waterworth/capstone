@@ -25,7 +25,7 @@ const SignupSchema = Yup.object().shape({
 
 const Register: React.FC<RegisterProps> = ({}) => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   return (
     <div>
       <h1>Signup</h1>
@@ -38,7 +38,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
-          const response = await register({ options: values });
+          const response = await register({ variables: { options: values } });
           console.log(values);
           if (response.data?.register.errors) {
             console.log(toErrorMap(response.data.register.errors));
@@ -77,4 +77,4 @@ const Register: React.FC<RegisterProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Register);
+export default Register;

@@ -8,14 +8,14 @@ interface LoginProps {}
 
 const Login = ({}) => {
   const router = useRouter();
-  const [, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMeQuery({
-    pause: isServer(),
+  const [logout] = useLogoutMutation();
+  const { data, loading } = useMeQuery({
+    skip: isServer(),
   });
   let body = null;
 
   //loading
-  if (fetching) {
+  if (loading) {
     // not logged in
   } else if (!data?.me) {
     body = (

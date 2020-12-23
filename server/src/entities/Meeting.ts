@@ -30,7 +30,7 @@ export class Meeting extends BaseEntity {
   host: User;
 
   @Field(() => [String])
-  @Column({ nullable: true })
+  @Column()
   users!: string;
 
   @Field()
@@ -43,7 +43,7 @@ export class Meeting extends BaseEntity {
 
   @Field()
   @Column({ nullable: true })
-  length!: number;
+  length: number;
 
   @Field(() => String)
   @CreateDateColumn()

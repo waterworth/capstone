@@ -39,7 +39,6 @@ const Login: React.FC<LoginProps> = (props) => {
         onSubmit={async (values) => {
           const response = await login({ variables: values });
           if (response.data?.login.errors) {
-            console.log(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.user) {
             if (typeof router.query.next === 'string') {
               router.push(router.query.next);

@@ -2,8 +2,8 @@ import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Datetime from 'react-datetime';
+import * as moment from 'moment';
 import 'react-datetime/css/react-datetime.css';
-import { number } from 'yup/lib/locale';
 import Header from '../components/Header/Header';
 import styles from '../styles/createmeeting.module.scss';
 import {
@@ -14,9 +14,14 @@ import {
 import { useIsAuth } from '../util/useIsAuth';
 import { useApolloClient } from '@apollo/client';
 
+interface MomentString {
+  format: typeof moment;
+}
+
 const CreateMeeting: React.FC<{}> = ({}) => {
-  const [userList, setUserList] = useState([]);
-  const [selected, setSelected] = useState([]);
+  const [userList, setUserList] = useState([] as number[]);
+  const [selected, setSelected] = useState([] as string[]);
+  const [userIds, setUserIds] = useState([] as number[] | undefined);
   const [createMeeting] = useCreateMeetingMutation();
   const { data } = useUsersQuery();
   const { data: medata } = useMeQuery();
@@ -31,21 +36,18 @@ const CreateMeeting: React.FC<{}> = ({}) => {
         initialValues={{
           title: '',
           timeslot: '',
-          length: number,
+          length: 0,
           description: '',
-          userIds: [medata?.me?.id],
+          userIds: [],
         }}
         onSubmit={async (values) => {
-          console.log(values);
           const { errors } = await createMeeting({
             variables: { input: values },
           });
           if (!errors) {
-            console.log(values);
             await apolloClient.resetStore();
             router.push('/');
           }
-          console.log(errors);
         }}>
         {({ setFieldValue }) => (
           <Form className={styles.createmeeting__form}>
@@ -65,15 +67,16 @@ const CreateMeeting: React.FC<{}> = ({}) => {
               Timeslot:
             </label>
             <Field className={styles.createmeeting__input} name='timeslot'>
-              {(field, form, meta) => (
+              {() => (
                 <Datetime
+                  dateFormat='MM/DD/YY HH:MM'
                   initialValue={new Date()}
                   timeConstraints={{
                     hours: { min: 9, max: 15, step: 2 },
                     minutes: { min: 0, max: 45, step: 15 },
                   }}
                   onChange={(time) => {
-                    setFieldValue('timeslot', time.format('MM/DD/YYYY HH:MM'));
+                    setFieldValue('timeslot', time);
                   }}
                 />
               )}
@@ -118,15 +121,12 @@ const CreateMeeting: React.FC<{}> = ({}) => {
                         setUserList([...userList, user.id]);
                         setFieldValue('userIds', userList);
                       } else {
-                        setUserList(
-                          userList.filter((user) => user.id !== user.id)
-                        );
+                        setUserList(userList.filter((user) => user !== user));
                       }
                     }
 
                     if (!selected.includes(user.username)) {
                       setSelected([...selected, user.username]);
-                      console.log(selected);
                     }
                   }}>
                   {userList.includes(user.id) ? <p>✅</p> : null}

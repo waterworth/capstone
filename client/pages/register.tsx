@@ -39,9 +39,8 @@ const Register: React.FC<RegisterProps> = ({}) => {
         validationSchema={SignupSchema}
         onSubmit={async (values) => {
           const response = await register({ variables: { options: values } });
-          console.log(values);
           if (response.data?.register.errors) {
-            console.log(toErrorMap(response.data.register.errors));
+            // console.log(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {
             router.push('/');
           }

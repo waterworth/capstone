@@ -5,8 +5,18 @@ import styles from './Schedule.module.scss';
 
 interface ScheduleProps {}
 
+interface MeetingData {
+  length: number;
+  description: string;
+  id: number;
+  title: string;
+  timeslot: string;
+}
+
 const Schedule: React.FC<ScheduleProps> = ({}) => {
-  const [meetingDetails, setMeetingDetails] = useState();
+  const [meetingDetails, setMeetingDetails] = useState<MeetingData | undefined>(
+    undefined
+  );
   const { data } = useMeetingsQuery();
   const date = new Date()
     .toString()

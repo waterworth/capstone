@@ -23,7 +23,7 @@
     "resolveJsonModule": true,
     "baseUrl": "."
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "prisma"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "files": ["./src/express-session.d.ts"]
 }

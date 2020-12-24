@@ -4,11 +4,10 @@ import {
   arg,
   asNexusMethod,
   booleanArg,
-  core,
+  extendType,
   intArg,
   mutationField,
   nonNull,
-  nullable,
   objectType,
   queryField,
   queryType,
@@ -20,6 +19,8 @@ import { sendEmail } from './util/sendEmail';
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'datetime');
 const dateArg = () => arg({ type: 'DateTime' });
+
+// User Object Type
 
 export const User = objectType({
   name: 'User',
@@ -40,44 +41,67 @@ export const User = objectType({
         return parent.isAdmin;
       },
     });
+    t.list.field('hosting', {
+      type: 'Meeting',
+      resolve(root, _args, ctx) {
+        return ctx.prisma.meeting.findMany({
+          where: {
+            hostId: root.id,
+          },
+        });
+      },
+    });
+    t.list.field('meetings', {
+      type: 'Meeting',
+      resolve(root, _args, ctx) {
+        return ctx.prisma.usersInMeeting.findMany({
+          where: {
+            user: {
+              id: root.id,
+            },
+          },
+        });
+      },
+    });
   },
 });
 
-export const UsersInMeeting = objectType({
-  name: 'UsersInMeeting',
+// Profile Object Type
+
+export const Profile = objectType({
+  name: 'Profile',
   definition(t) {
+    t.id('id');
     t.int('userId', {
       resolve(parent) {
         return parent.userId;
       },
     });
-    t.int('meetingId', {
+    t.string('picture', {
       resolve(parent) {
-        return parent.userId;
+        return parent.picture;
       },
     });
+    t.list.string('availability', {
+      resolve(parent) {
+        return parent.availability;
+      },
+    });
+
     t.field('user', {
       type: 'User',
       resolve(root, _args, ctx) {
-        return ctx.prisma.user.findUnique({
+        return ctx.prisma.findUnique({
           where: {
             id: root.userId,
           },
         });
       },
     });
-    t.field('meeting', {
-      type: 'Meeting',
-      resolve(root, _args, ctx) {
-        return ctx.prisma.meeting.findUnique({
-          where: {
-            id: root.meetingId,
-          },
-        });
-      },
-    });
   },
 });
+
+// Meeting Object Type
 
 export const Meeting = objectType({
   name: 'Meeting',
@@ -118,14 +142,62 @@ export const Meeting = objectType({
         });
       },
     });
-    t.field('users', {
+    t.list.field('users', {
+      type: 'User',
+      async resolve(root, _args, ctx) {
+        const users = await ctx.prisma.usersInMeeting.findMany({
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                email: true,
+              },
+            },
+          },
+          where: {
+            meetingId: root.id,
+          },
+        });
+        return users.map((user: any) => {
+          return user.user;
+        });
+      },
+    });
+  },
+});
+
+// UsersInMeeting Object Type
+
+export const UsersInMeeting = objectType({
+  name: 'UsersInMeeting',
+  definition(t) {
+    t.int('userId', {
+      resolve(parent) {
+        return parent.userId;
+      },
+    });
+    t.int('meetingId', {
+      resolve(parent) {
+        return parent.userId;
+      },
+    });
+    t.field('user', {
       type: 'User',
       resolve(root, _args, ctx) {
-        return ctx.prisma.usersInMeeting.findMany({
+        return ctx.prisma.user.findUnique({
           where: {
-            meeting: {
-              id: root.id,
-            },
+            id: root.userId,
+          },
+        });
+      },
+    });
+    t.field('meeting', {
+      type: 'Meeting',
+      resolve(root, _args, ctx) {
+        return ctx.prisma.meeting.findUnique({
+          where: {
+            id: root.meetingId,
           },
         });
       },
@@ -145,7 +217,7 @@ export const createUser = mutationField('createUser', {
   },
   async resolve(_root, args, ctx) {
     const hasedPassword = await argon2.hash(args.password);
-    const user = ctx.prisma.user.create({
+    const user = await ctx.prisma.user.create({
       data: {
         username: args.username,
         password: hasedPassword,
@@ -155,7 +227,7 @@ export const createUser = mutationField('createUser', {
     });
     ctx.req.session.userId = user.id;
 
-    return { user };
+    return user;
   },
 });
 

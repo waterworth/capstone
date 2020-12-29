@@ -4,7 +4,7 @@ import {
   arg,
   asNexusMethod,
   booleanArg,
-  extendType,
+  inputObjectType,
   intArg,
   mutationField,
   nonNull,
@@ -53,13 +53,25 @@ export const User = objectType({
     });
     t.list.field('meetings', {
       type: 'Meeting',
-      resolve(root, _args, ctx) {
-        return ctx.prisma.usersInMeeting.findMany({
-          where: {
-            user: {
-              id: root.id,
+      async resolve(root, _args, ctx) {
+        const meetings = await ctx.prisma.usersInMeeting.findMany({
+          include: {
+            meeting: {
+              select: {
+                id: true,
+                title: true,
+                timeslot: true,
+                length: true,
+                description: true,
+              },
             },
           },
+          where: {
+            userId: root.id,
+          },
+        });
+        return meetings.map((meeting: any) => {
+          return meeting.meeting;
         });
       },
     });
@@ -205,6 +217,27 @@ export const UsersInMeeting = objectType({
   },
 });
 
+// Input Types
+
+export const MeetingInput = inputObjectType({
+  name: 'MeetingInput',
+  definition(t) {
+    t.nonNull.string('title');
+    t.nonNull.datetime('timeslot');
+    t.int('length');
+    t.string('description');
+  },
+});
+
+export const UsernamePasswordInput = inputObjectType({
+  name: 'UsernamePasswordInput',
+  definition(t) {
+    t.nonNull.string('username');
+    t.nonNull.string('password');
+    t.nonNull.string('email');
+    t.boolean('isAdmin');
+  },
+});
 // Mutations
 
 export const createUser = mutationField('createUser', {
@@ -272,6 +305,7 @@ export const loginUser = mutationField('login', {
       };
     }
     ctx.req.session.userId = user[0].id;
+    console.log(ctx.req.session.id);
     return user[0];
   },
 });
@@ -370,29 +404,16 @@ export const forgotPassword = mutationField('forgotPassword', {
 });
 
 // TODO Investigate sessionID for hosts
-// TODO Add users to meeting as well
 export const createMeeting = mutationField('createMeeting', {
   type: 'Meeting',
   args: {
-    title: nonNull(stringArg()),
-    timeslot: nonNull(dateArg()),
-    length: nonNull(intArg()),
-    description: nonNull(stringArg()),
-    hostId: nonNull(intArg()),
+    input: MeetingInput,
   },
-  resolve(_root, args, ctx) {
-    return ctx.prisma.meeting.create({
-      data: {
-        title: args.title,
-        timeslot: args.timeslot,
-        length: args.length,
-        description: args.description,
-        host: {
-          connect: {
-            id: args.hostId,
-          },
-        },
-      },
+  resolve(_root, _args, ctx) {
+    return ctx.prisma.createMeeting({
+      data: arg({
+        type: 'MeetingInput',
+      }),
     });
   },
 });
@@ -488,7 +509,7 @@ export const Query = queryType({
 export const meQuery = queryField('me', {
   type: 'User',
   resolve(_root, _args, ctx) {
-    console.log(ctx.req.session.userId);
+    console.log(ctx.req.session.id);
     if (!ctx.req.session.userId) {
       return null;
     }

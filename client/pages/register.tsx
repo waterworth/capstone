@@ -2,16 +2,11 @@ import React from 'react';
 import * as Yup from 'yup';
 import RegisterForm from '../components/RegisterForm';
 import styled from 'styled-components';
+import Divider from '../components/Divider';
 
 const Main = styled.main`
   margin: 3rem;
   width: 70%;
-`;
-
-const Line = styled.div`
-  background-color: ${(props) => props.theme.colours['grey-light1']};
-  height: 1px;
-  width: 100%;
 `;
 
 const Section = styled.section`
@@ -38,7 +33,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
           <p>
             Let’s get you all set up so you can begin setting up your profile
           </p>
-          <Line />
+          <Divider />
         </Section>
         <RegisterForm />
       </Main>

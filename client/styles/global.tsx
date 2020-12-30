@@ -7,6 +7,7 @@ export const bodyStyles = css`
   display: flex;
   padding: 0;
   margin: 0;
+
   font-family: 'Inter', sans-serif;
   a {
     color: inherit;

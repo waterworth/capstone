@@ -305,7 +305,6 @@ export const loginUser = mutationField('login', {
       };
     }
     ctx.req.session.userId = user[0].id;
-    console.log(ctx.req.session.id);
     return user[0];
   },
 });

@@ -1,99 +1,48 @@
-import { Field, Form, Formik } from 'formik';
-import { useRouter } from 'next/router';
 import React from 'react';
 import * as Yup from 'yup';
-import Header from '../components/Header/Header';
-import { useRegisterMutation } from '../generated/graphql';
-import { toErrorMap } from '../util/toErrorMap';
-import styles from '../styles/register.module.scss';
+import RegisterForm from '../components/RegisterForm';
+import styled from 'styled-components';
+
+const Main = styled.main`
+  margin: 3rem;
+  width: 70%;
+`;
+
+const Line = styled.div`
+  background-color: ${(props) => props.theme.colours['grey-light1']};
+  height: 1px;
+  width: 100%;
+`;
+
+const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 
 interface RegisterProps {}
 
-const SignupSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-
-  password: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-
-  email: Yup.string().email(),
-});
-
 const Register: React.FC<RegisterProps> = ({}) => {
-  const router = useRouter();
-  const [register] = useRegisterMutation();
   return (
-    <main className={styles.register}>
-      <Header title='Register' />
-      <Formik
-        initialValues={{
-          username: '',
-          password: '',
-          email: '',
-          isAdmin: false,
-        }}
-        validationSchema={SignupSchema}
-        onSubmit={async (values) => {
-          const response = await register({ variables: { options: values } });
-          if (response.data?.register.errors) {
-            // console.log(toErrorMap(response.data.register.errors));
-          } else if (response.data?.register.user) {
-            router.push('/');
-          }
-        }}>
-        {({ errors, touched }) => (
-          <Form className={styles.register__form}>
-            <label className={styles.register__label} htmlFor='username'>
-              Username
-            </label>
-            <Field
-              className={styles.register__input}
-              name='username'
-              placeholder='Username'
-            />
-
-            {errors.username && touched.username ? (
-              <p className={styles.register__error}>{errors.username}</p>
-            ) : null}
-
-            <label className={styles.register__label} htmlFor='password'>
-              Password
-            </label>
-            <Field
-              className={styles.register__input}
-              name='password'
-              placeholder='Password'
-              type='password'
-            />
-
-            {errors.password && touched.password ? (
-              <p className={styles.register__error}>{errors.password}</p>
-            ) : null}
-
-            <label className={styles.register__label} htmlFor='email'>
-              Email
-            </label>
-            <Field
-              className={styles.register__input}
-              name='email'
-              placeholder='Email'
-            />
-
-            {errors.password && touched.password ? (
-              <p className={styles.register__error}>{errors.email}</p>
-            ) : null}
-
-            <button className={styles.register__button} type='submit'>
-              Register
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </main>
+    <>
+      <section>
+        <p>
+          Welcome to your new home for creating schedules and managing your
+          teams time!
+        </p>
+      </section>
+      <Main>
+        <Section>
+          <h1>Register</h1>
+          <h2>Manage your schedules and meetings effectively.</h2>
+          <p>
+            Let’s get you all set up so you can begin setting up your profile
+          </p>
+          <Line />
+        </Section>
+        <RegisterForm />
+      </Main>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 // theme.ts
-import { DefaultTheme } from 'styled-components/native';
+import { DefaultTheme } from 'styled-components';
 
-export const lightTheme: DefaultTheme = {
+export const Theme: DefaultTheme = {
   colours: {
     amber: '#e48a4e',
     'amber-dark1': '#e17b38',

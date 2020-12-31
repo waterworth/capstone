@@ -1,3 +1,6 @@
+// TODO Remove main sidebar
+// Add logo
+
 import { useApolloClient } from '@apollo/client';
 import { useRouter } from 'next/router';
 import React from 'react';

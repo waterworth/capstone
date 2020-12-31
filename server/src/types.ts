@@ -508,7 +508,6 @@ export const Query = queryType({
 export const meQuery = queryField('me', {
   type: 'User',
   resolve(_root, _args, ctx) {
-    console.log(ctx.req.session.id);
     if (!ctx.req.session.userId) {
       return null;
     }

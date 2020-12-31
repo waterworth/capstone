@@ -1,11 +1,9 @@
 import { Field, Form, Formik } from 'formik';
-import { NextPage, NextPageContext } from 'next';
-import { withUrqlClient } from 'next-urql';
+import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useChangePasswordMutation } from '../../generated/graphql';
-import { createUrqlClient } from '../../util/createUrqlClient';
 import { toErrorMap } from '../../util/toErrorMap';
 
 const ChangePassword: NextPage = () => {

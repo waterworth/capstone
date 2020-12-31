@@ -1,3 +1,5 @@
+// TODO remove sidebar from page
+
 import React from 'react';
 import * as Yup from 'yup';
 import RegisterForm from '../components/RegisterForm';

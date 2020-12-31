@@ -8,7 +8,6 @@ interface ButtonProps {
 const BaseButton = styled.button`
   color: white;
   background-color: ${(props) => props.theme.colours.lightblue};
-  margin: 1rem 2.5rem;
   width: 15rem;
   padding: 0.8rem;
   border: none;

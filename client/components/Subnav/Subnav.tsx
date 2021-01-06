@@ -1,23 +1,63 @@
 import Link from 'next/link';
 import React from 'react';
-import styles from './Subnav.module.scss';
 
 interface SubnavProps {}
 
 export const Subnav: React.FC<SubnavProps> = ({}) => {
   return (
-    <nav className={styles.subnav}>
-      <ul className={styles.subnav__menu}>
-        <li className={` ${styles.subnav__menuitem} ${styles.active} `}>
-          Schedule
-        </li>
-        <li className={styles.subnav__menuitem}>Inbox</li>
-        <li className={styles.subnav__menuitem}>Meetings</li>
+    <nav>
+      <ul>
+        <li>Schedule</li>
+        <li>Inbox</li>
+        <li>Meetings</li>
       </ul>
 
       <Link href='/create-meeting'>
-        <a className={styles.button__new}>Create New Meeting</a>
+        <a>Create New Meeting</a>
       </Link>
     </nav>
   );
 };
+
+//
+// .subnav {
+//   position: sticky;
+//   top: 136px;
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-between;
+//   background-color: #fff;
+//   border-bottom: 1px solid $cloud;
+
+//   &__menu {
+//     margin: 0 3rem;
+//     padding: 0;
+//     display: flex;
+//     list-style: none;
+//   }
+//   &__menuitem {
+//     padding: 1.5rem 0 1.5rem 0;
+//     margin: 0 2rem 0 0;
+//     font-size: 1.25rem;
+//   }
+// }
+// .button {
+//   &__new {
+//     margin: 1.5rem 3rem;
+//     height: 100%;
+//     border: none;
+//     border-radius: 10px;
+//     padding: 0.6rem 1.5rem;
+//     font-weight: 700;
+//     background-color: $lightblue;
+//     &:hover {
+//       background-color: $lightblue-dark2;
+//     }
+//   }
+// }
+
+// .active {
+//   color: $lightblue-dark2;
+//   font-weight: 600;
+//   border-bottom: 0.4rem solid $lightblue-dark2;
+// }

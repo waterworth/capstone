@@ -1,13 +1,13 @@
 import React from 'react';
-import Header from '../Header/Header';
-import styles from './Dashboard.module.scss';
-import { Subnav } from '../Subnav/Subnav';
-import Schedule from '../Schedule/Schedule';
+import styled from 'styled-components';
+import Header from '../Header/';
+import Subnav from '../Subnav/';
+import Schedule from '../Schedule/';
 import { useMeQuery } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import Login from '../Login';
 
-const Dashboard = () => {
+export const Dashboard = () => {
   const { data, loading } = useMeQuery();
   const router = useRouter();
   let body = null;
@@ -18,7 +18,7 @@ const Dashboard = () => {
     body = <Login />;
   } else
     body = (
-      <main className={styles.dashboard}>
+      <main>
         <Header title='Dashboard' />
         <Subnav />
         <Schedule />
@@ -28,4 +28,7 @@ const Dashboard = () => {
   return <>{body}</>;
 };
 
-export default Dashboard;
+// .dashboard
+// width: 100%;
+//   height: 100vh;
+//   overflow: scroll;

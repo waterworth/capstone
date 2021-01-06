@@ -13,5 +13,6 @@ const Template: Story<ComponentProps<typeof Button>> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
+  content: 'Default Button',
   /* the args you need here will depend on your component */
 };

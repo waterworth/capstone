@@ -1,39 +1,38 @@
 import Link from 'next/link';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
-import styles from './Header.module.scss';
 
-const Header = (props: any) => {
+export const Header = (props: any) => {
   const { data } = useMeQuery();
 
   return (
-    <header className={styles.header}>
-      <h1 className={styles.header__title}>{props.title}</h1>
+    <header>
+      <h1>{props.title}</h1>
       {data?.me ? (
-        <section className={styles.header__users}>
-          <a className={styles.header__user}>
+        <section>
+          <a>
             <img src='https://via.placeholder.com/46' alt='userImage'></img>
           </a>
-          <a className={styles.header__user}>
+          <a>
             <img src='https://via.placeholder.com/46' alt='userImage'></img>
           </a>
-          <a className={styles.header__user}>
+          <a>
             <img src='https://via.placeholder.com/46' alt='userImage'></img>
           </a>
-          <a className={styles.header__user}>
+          <a>
             <img src='https://via.placeholder.com/46' alt='userImage'></img>
           </a>
-          <a className={styles.header__user}>
+          <a>
             <img src='https://via.placeholder.com/46' alt='userImage'></img>
           </a>
         </section>
       ) : (
-        <section className={styles.header__links}>
+        <section>
           <Link href='/login'>
-            <a className={styles.header__link}>Sign In</a>
+            <a>Sign In</a>
           </Link>
           <Link href='/register'>
-            <a className={styles.header__link}>Sign Up</a>
+            <a>Sign Up</a>
           </Link>
         </section>
       )}
@@ -41,4 +40,33 @@ const Header = (props: any) => {
   );
 };
 
-export default Header;
+// .header {
+//   padding: 4rem 3rem 1.5rem 3rem;
+//   position: sticky;
+//   top: 0;
+//   width: 100%;
+//   height: 8.5rem;
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+//   border-bottom: 1px solid $cloud;
+//   background-color: $white;
+//   &__title {
+//     margin: 0;
+//     font-size: 2rem;
+//   }
+//   &__user {
+//     margin-right: 0.375rem;
+//     &:last-child {
+//       margin-right: 0;
+//     }
+//   }
+//   &__link {
+//     color: $black;
+//     margin-left: 2rem;
+//     &:hover {
+//       color: $lightblue-dark2;
+//       transition: color 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+//     }
+//   }
+// }

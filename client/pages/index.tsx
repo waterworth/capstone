@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMeetingsQuery, useMeQuery } from '../generated/graphql';
-import Dashboard from '../components/Dashboard/Dashboard';
+import Dashboard from '../components/Dashboard/';
 import { useRouter } from 'next/router';
 import Login from '../components/Login';
 

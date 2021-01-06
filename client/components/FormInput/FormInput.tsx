@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Field, useField } from 'formik';
+import { useField } from 'formik';
 
 interface FormInputProps {
   [x: string]: any;

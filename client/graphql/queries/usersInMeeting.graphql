@@ -1,0 +1,10 @@
+query UsersInMeeting {
+  usersInMeeting {
+    user {
+      ...RegularUser
+    }
+    meeting {
+      ...RegularMeeting
+    }
+  }
+}

@@ -1,0 +1,10 @@
+mutation AddUsersToMeeting($userId: Int!, $meetingId: Int!) {
+  addUsersToMeeting(userId: $userId, meetingId: $meetingId) {
+    meeting {
+      id
+      users {
+        ...RegularUser
+      }
+    }
+  }
+}

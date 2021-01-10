@@ -218,7 +218,6 @@ export const UsersInMeeting = objectType({
 });
 
 // Input Types
-
 export const MeetingInput = inputObjectType({
   name: 'MeetingInput',
   definition(t) {

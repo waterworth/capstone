@@ -1,0 +1,13 @@
+fragment RegularMeeting on Meeting {
+  id
+  title
+  description
+  timeslot
+  length
+  host {
+    ...RegularUser
+  }
+  users {
+    ...RegularUser
+  }
+}

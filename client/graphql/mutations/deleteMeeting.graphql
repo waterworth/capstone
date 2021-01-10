@@ -1,3 +1,5 @@
 mutation DeleteMeeting($id: Int!) {
-  deleteMeeting(id: $id)
+  deleteMeeting(id: $id) {
+    ...RegularMeeting
+  }
 }

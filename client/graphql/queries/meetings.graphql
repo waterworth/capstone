@@ -1,9 +1,5 @@
 query Meetings {
   meetings {
-    id
-    title
-    length
-    timeslot
-    description
+    ...RegularMeeting
   }
 }

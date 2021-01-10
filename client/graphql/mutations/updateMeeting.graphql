@@ -1,18 +1,17 @@
 mutation UpdateMeeting(
   $id: Int!
   $title: String!
-  $timeslot: String!
+  $timeslot: DateTime!
+  $length: Int!
   $description: String!
 ) {
   updateMeeting(
     id: $id
     title: $title
     timeslot: $timeslot
+    length: $length
     description: $description
   ) {
-    id
-    title
-    timeslot
-    description
+    ...RegularMeeting
   }
 }

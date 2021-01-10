@@ -1,5 +1,3 @@
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../util/createUrqlClient';
 import Sidebar from './Sidebar/Sidebar';
 
 function Layout(props: any) {
@@ -34,4 +32,4 @@ function Layout(props: any) {
   );
 }
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Layout);
+export default Layout;

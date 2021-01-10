@@ -1,8 +1,11 @@
-query Users{
-  users{
-    id
-    username
-    email
-    isAdmin
+query Users {
+  users {
+    ...RegularUser
+    hosting {
+      ...RegularMeeting
+    }
+    meetings {
+      ...RegularMeeting
+    }
   }
 }

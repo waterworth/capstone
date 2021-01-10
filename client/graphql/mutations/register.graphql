@@ -1,5 +1,18 @@
-  mutation Register($options: UsernamePasswordInput!){
-      register(options: $options) {
-        ...RegularUserResponse
-      }
-    }
+mutation Register(
+  $username: String!
+  $email: String!
+  $password: String!
+  $admin: Boolean!
+) {
+  createUser(
+    username: $username
+    email: $email
+    password: $password
+    isAdmin: $admin
+  ) {
+    id
+    username
+    email
+    isAdmin
+  }
+}

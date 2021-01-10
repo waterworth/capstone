@@ -14,6 +14,7 @@ const InputItem = styled.div`
 const CheckboxItem = styled.div`
   display: flex;
 `;
+const TextAreaItem = styled.div``;
 
 const Input = styled.input`
   display: flex;
@@ -23,6 +24,18 @@ const Input = styled.input`
   font-size: 1rem;
   width: 25rem;
   height: 2.5rem;
+  margin: 0.5rem 0 1rem 0;
+`;
+
+const TextArea = styled.textarea`
+  display: flex;
+  resize: none;
+  padding: 0 0.5rem;
+  border: 1px solid #000;
+  border-radius: 0.85rem;
+  font-size: 1rem;
+  width: 25rem;
+  height: 10rem;
   margin: 0.5rem 0 1rem 0;
 `;
 
@@ -56,5 +69,16 @@ export const CheckboxInput = ({ label, ...props }: FormInputProps) => {
       <Label htmlFor={props.name}>{label}</Label>
       {meta.touched && meta.error ? <Error>{meta.error}</Error> : null}
     </CheckboxItem>
+  );
+};
+
+export const TextAreaInput = ({ label, ...props }: FormInputProps) => {
+  const [field, meta] = useField(props);
+  return (
+    <TextAreaItem>
+      <Label htmlFor={props.name}>{label}</Label>
+      <TextArea {...field} {...props} />
+      {meta.touched && meta.error ? <Error>{meta.error}</Error> : null}
+    </TextAreaItem>
   );
 };

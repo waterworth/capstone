@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Datetime from 'react-datetime';
 import * as moment from 'moment';
 import 'react-datetime/css/react-datetime.css';
-import Header from '../components/Header/Header';
+import Header from '../components/Header/';
 import styles from '../styles/createmeeting.module.scss';
 import {
   useCreateMeetingMutation,

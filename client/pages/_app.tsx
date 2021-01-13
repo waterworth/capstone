@@ -1,6 +1,5 @@
 import React from 'react';
 import App from 'next/app';
-import Layout from '../components/Layout';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../styles/global';
@@ -19,10 +18,8 @@ class MyApp extends App {
     return (
       <ApolloProvider client={client}>
         <ThemeProvider theme={Theme}>
-          <Layout>
-            <GlobalStyle />
-            <Component {...pageProps} />
-          </Layout>
+          <GlobalStyle />
+          <Component {...pageProps} />
         </ThemeProvider>
       </ApolloProvider>
     );

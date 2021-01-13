@@ -6,6 +6,7 @@ import Schedule from '../Schedule/';
 import { useMeQuery } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import Login from '../Login';
+import Layout from '../Layout';
 
 export const Dashboard = () => {
   const { data, loading } = useMeQuery();
@@ -18,11 +19,13 @@ export const Dashboard = () => {
     body = <Login />;
   } else
     body = (
-      <main>
-        <Header title='Dashboard' />
-        <Subnav />
-        <Schedule />
-      </main>
+      <Layout>
+        <main>
+          <Header title='Dashboard' />
+          <Subnav />
+          <Schedule />
+        </main>
+      </Layout>
     );
 
   return <>{body}</>;

@@ -6,7 +6,6 @@ import Login from '../components/Login';
 
 const Index = () => {
   const router = useRouter();
-  const { data } = useMeetingsQuery();
   const { data: medata } = useMeQuery();
   return <>{!medata ? <Login /> : <Dashboard />}</>;
 };

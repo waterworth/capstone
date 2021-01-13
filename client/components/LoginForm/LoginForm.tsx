@@ -1,5 +1,4 @@
-// TODO Continue fixing this page
-// Add queries and functionality
+// TODO UPDATE CACHE
 
 import { Form, Formik, FormikProps } from 'formik';
 import React from 'react';
@@ -8,9 +7,19 @@ import * as Yup from 'yup';
 import CenteredButton from '../Button';
 import Divider from '../Divider';
 import { FormInput } from '../FormInput/FormInput';
+import { useLoginMutation } from '../../generated/graphql';
+import { useRouter } from 'next/router';
 interface LoginFormProps {}
 
-const LoginWrapper = styled.div`
+const Wrapper = styled.div`
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 30rem;
@@ -44,99 +53,53 @@ const SignupSchema = Yup.object().shape({
 });
 
 export const LoginForm: React.FC<LoginFormProps> = ({}) => {
+  const router = useRouter();
+  const [loginMutation, { loading, error, data }] = useLoginMutation();
   return (
-    <LoginWrapper>
-      <Heading>Sign In</Heading>
-      <Divider />
-      <Formik
-        initialValues={initialValues}
-        validationSchema={SignupSchema}
-        onSubmit={async (values, actions) => {
-          console.log(values);
-          actions.setSubmitting(true);
-        }}>
-        {(props: FormikProps<any>) => (
-          <Form>
-            <FormInput
-              name='usernameOrEmail'
-              type='username'
-              label='Username or Email'
-              placeholder='Username or Email'
-            />
-            <FormInput
-              name='password'
-              type='password'
-              label='Password'
-              placeholder='Password'
-            />
-          </Form>
-        )}
-      </Formik>
-      <Divider />
-      <CenteredButton content='Sign in' />
-      {/* <Link href='/forgot-password'>Forgot Password?</Link> */}
-    </LoginWrapper>
+    <Wrapper>
+      <FormWrapper>
+        <Heading>Sign In</Heading>
+        <Divider />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={SignupSchema}
+          onSubmit={async (values) => {
+            const response = await loginMutation({
+              variables: {
+                usernameOrEmail: values.usernameOrEmail,
+                password: values.password,
+              },
+            });
+            if (response.data?.login) {
+              if (typeof router.query.next === 'string') {
+                router.push(router.query.next);
+              } else {
+                router.push('/');
+              }
+            }
+            console.log(values);
+          }}>
+          {(props: FormikProps<any>) => (
+            <Form>
+              <FormInput
+                name='usernameOrEmail'
+                type='username'
+                label='Username or Email'
+                placeholder='Username or Email'
+              />
+              <FormInput
+                name='password'
+                type='password'
+                label='Password'
+                placeholder='Password'
+              />
+              <Divider />
+              <CenteredButton content='Sign in' type='submit' />
+            </Form>
+          )}
+        </Formik>
+        {/* <Link href='/forgot-password'>Forgot Password?</Link> */}
+      </FormWrapper>
+    </Wrapper>
   );
 };
-
-// <div className={styles.login}>
-//   <Header title='Login' />
-//   <Formik
-//     initialValues={{
-//       usernameOrEmail: '',
-//       password: '',
-//     }}
-//     validationSchema={SignupSchema}
-//     onSubmit={async (values) => {
-//       const response = await login({ variables: values });
-//       console.log(response);
-//       if (response.data?.login.errors) {
-//         // console.log(toErrorMap(response.data.login.errors));
-//       } else if (response.data?.login.user) {
-//         if (typeof router.query.next === 'string') {
-//           router.push(router.query.next);
-//         } else {
-//           router.push('/');
-//           await apolloClient.resetStore();
-//         }
-//       }
-//     }}>
-//     {({ errors, touched }) => (
-//       <Form className={styles.login__form}>
-//         <label className={styles.login__label} htmlFor='username'>
-//           Username
-//         </label>
-//         <Field
-//           className={styles.login__input}
-//           name='usernameOrEmail'
-//           placeholder='Username or Email'
-//         />
-
-//         {errors.usernameOrEmail && touched.usernameOrEmail ? (
-//           <p className={styles.login__error}>{errors.usernameOrEmail}</p>
-//         ) : null}
-
-//         <label className={styles.login__label} htmlFor='password'>
-//           Password
-//         </label>
-//         <Field
-//           className={styles.login__input}
-//           name='password'
-//           placeholder='Password'
-//           type='password'
-//         />
-
-//         {errors.password && touched.password ? (
-//           <p className={styles.login__error}>{errors.password}</p>
-//         ) : null}
-
-//         <button className={styles.login__button} type='submit'>
-//           Login
-//         </button>
-//         <Link href='/forgot-password'>
-//           <a className={styles.login__link}>Forgot password?</a>
-//         </Link>
-//       </Form>
-//     )}
-//   </Formik>
-// </div>

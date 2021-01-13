@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 interface ButtonProps {
   content: string;
+  type?: 'button' | 'reset' | 'submit';
 }
 
 const BaseButton = styled.button`

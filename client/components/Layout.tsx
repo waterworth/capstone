@@ -1,4 +1,4 @@
-import Sidebar from './Sidebar/Sidebar';
+import Sidebar from './Sidebar/';
 
 function Layout(props: any) {
   return (
@@ -13,6 +13,7 @@ function Layout(props: any) {
             padding: 0;
             margin: 0;
             font-family: 'Inter', sans-serif;
+            width: 100vw;
           }
           a {
             color: inherit;
@@ -25,6 +26,7 @@ function Layout(props: any) {
           .page-layout {
             display: flex;
             flex-direction: row;
+            width: 100vw;
           }
         `}
       </style>

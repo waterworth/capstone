@@ -1,72 +1,65 @@
 import Link from 'next/link';
 import React from 'react';
+import styled from 'styled-components';
 import { useMeQuery } from '../../generated/graphql';
+
+const Wrapper = styled.header`
+  padding: 4rem 3rem 1.5rem 0;
+  position: sticky;
+  top: 0;
+  height: 8.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid ${(props) => props.theme.colours.cloud};
+  background-color: ${(props) => props.theme.colours.white};
+`;
+
+const Title = styled.h1`
+  margin: 0;
+  font-size: 2rem;
+`;
+
+const UserImage = styled.img`
+  margin-right: 0.375rem;
+  &:last-child {
+    margin-right: 0;
+  }
+`;
 
 export const Header = (props: any) => {
   const { data } = useMeQuery();
 
   return (
-    <header>
-      <h1>{props.title}</h1>
-      {data?.me ? (
-        <section>
-          <a>
-            <img src='https://via.placeholder.com/46' alt='userImage'></img>
-          </a>
-          <a>
-            <img src='https://via.placeholder.com/46' alt='userImage'></img>
-          </a>
-          <a>
-            <img src='https://via.placeholder.com/46' alt='userImage'></img>
-          </a>
-          <a>
-            <img src='https://via.placeholder.com/46' alt='userImage'></img>
-          </a>
-          <a>
-            <img src='https://via.placeholder.com/46' alt='userImage'></img>
-          </a>
-        </section>
-      ) : (
-        <section>
-          <Link href='/login'>
-            <a>Sign In</a>
-          </Link>
-          <Link href='/register'>
-            <a>Sign Up</a>
-          </Link>
-        </section>
-      )}
-    </header>
+    <Wrapper>
+      <Title>{props.title}</Title>
+      <section>
+        <a>
+          <UserImage
+            src='https://via.placeholder.com/46'
+            alt='userImage'></UserImage>
+        </a>
+        <a>
+          <UserImage
+            src='https://via.placeholder.com/46'
+            alt='userImage'></UserImage>
+        </a>
+        <a>
+          <UserImage
+            src='https://via.placeholder.com/46'
+            alt='userImage'></UserImage>
+        </a>
+        <a>
+          <UserImage
+            src='https://via.placeholder.com/46'
+            alt='userImage'></UserImage>
+        </a>
+        <a>
+          <UserImage
+            src='https://via.placeholder.com/46'
+            alt='userImage'></UserImage>
+        </a>
+      </section>
+    </Wrapper>
   );
 };
-
-// .header {
-//   padding: 4rem 3rem 1.5rem 3rem;
-//   position: sticky;
-//   top: 0;
-//   width: 100%;
-//   height: 8.5rem;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   border-bottom: 1px solid $cloud;
-//   background-color: $white;
-//   &__title {
-//     margin: 0;
-//     font-size: 2rem;
-//   }
-//   &__user {
-//     margin-right: 0.375rem;
-//     &:last-child {
-//       margin-right: 0;
-//     }
-//   }
-//   &__link {
-//     color: $black;
-//     margin-left: 2rem;
-//     &:hover {
-//       color: $lightblue-dark2;
-//       transition: color 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-//     }
-//   }
-// }

@@ -29,7 +29,7 @@ export const Schedule: React.FC<ScheduleProps> = ({}) => {
         meetingDetails !== undefined ? setMeetingDetails(undefined) : null
       }>
       <section>
-        <p>Good Morning! Today is {date}. Here are your upcoming events!</p>
+        <p>Hey there! Today is {date}. Here are your upcoming events!</p>
         {!data ? (
           <div> Loading ... </div>
         ) : (

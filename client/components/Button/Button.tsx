@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface ButtonProps {
   content: string;
   type?: 'button' | 'reset' | 'submit';
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const BaseButton = styled.button`
@@ -25,6 +26,13 @@ const CenterButton = styled(BaseButton)`
   margin: 0 auto;
 `;
 
+const MeetingButton = styled(BaseButton)`
+  height: 2.5rem;
+  font-size: 1rem;
+  padding: 0;
+  width: 12rem;
+`;
+
 export const Button: React.FC<ButtonProps> = (props) => {
   return <BaseButton> {props.content}</BaseButton>;
 };
@@ -33,4 +41,8 @@ export const Button: React.FC<ButtonProps> = (props) => {
 
 export const CenteredButton: React.FC<ButtonProps> = (props) => {
   return <CenterButton> {props.content}</CenterButton>;
+};
+
+export const CreateMeetingButton: React.FC<ButtonProps> = (props) => {
+  return <MeetingButton onClick={props.onClick}>{props.content}</MeetingButton>;
 };

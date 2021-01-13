@@ -1,61 +1,53 @@
 import Link from 'next/link';
 import React from 'react';
+import styled from 'styled-components';
+import Button from '../Button';
+import { CreateMeetingButton } from '../Button/Button';
 
 interface SubnavProps {}
 
+const Wrapper = styled.nav`
+  position: sticky;
+  top: 136px;
+  width: 100%;
+  padding-right: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border-bottom: 1px solid ${(props) => props.theme.colours.cloud};
+`;
+
+const Menu = styled.ul`
+  margin: 0;
+  padding: 0;
+  display: flex;
+  list-style: none;
+`;
+
+const MenuItem = styled.li`
+  padding: 1.5rem 0 1.5rem 0;
+  margin: 0 2rem 0 0;
+  font-size: 1.25rem;
+`;
+
 export const Subnav: React.FC<SubnavProps> = ({}) => {
   return (
-    <nav>
-      <ul>
-        <li>Schedule</li>
-        <li>Inbox</li>
-        <li>Meetings</li>
-      </ul>
+    <Wrapper>
+      <Menu>
+        <MenuItem>Schedule</MenuItem>
+        <MenuItem>Inbox</MenuItem>
+        <MenuItem>Meetings</MenuItem>
+      </Menu>
 
       <Link href='/create-meeting'>
-        <a>Create New Meeting</a>
+        <CreateMeetingButton content='Create New Meeting' />
       </Link>
-    </nav>
+    </Wrapper>
   );
 };
 
-//
-// .subnav {
-//   position: sticky;
-//   top: 136px;
-//   width: 100%;
-//   display: flex;
-//   justify-content: space-between;
-//   background-color: #fff;
-//   border-bottom: 1px solid $cloud;
-
-//   &__menu {
-//     margin: 0 3rem;
-//     padding: 0;
-//     display: flex;
-//     list-style: none;
-//   }
-//   &__menuitem {
-//     padding: 1.5rem 0 1.5rem 0;
-//     margin: 0 2rem 0 0;
-//     font-size: 1.25rem;
-//   }
-// }
-// .button {
-//   &__new {
-//     margin: 1.5rem 3rem;
-//     height: 100%;
-//     border: none;
-//     border-radius: 10px;
-//     padding: 0.6rem 1.5rem;
-//     font-weight: 700;
-//     background-color: $lightblue;
-//     &:hover {
-//       background-color: $lightblue-dark2;
-//     }
-//   }
-// }
-
+//TODO add active class on menu items
 // .active {
 //   color: $lightblue-dark2;
 //   font-weight: 600;

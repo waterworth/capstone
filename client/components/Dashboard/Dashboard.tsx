@@ -8,7 +8,13 @@ import { useRouter } from 'next/router';
 import Login from '../Login';
 import Layout from '../Layout';
 
-export const Dashboard = () => {
+const Wrapper = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+export const Dashboard = (props: any) => {
   const { data, loading } = useMeQuery();
   const router = useRouter();
   let body = null;
@@ -20,11 +26,11 @@ export const Dashboard = () => {
   } else
     body = (
       <Layout>
-        <main>
+        <Wrapper>
           <Header title='Dashboard' />
           <Subnav />
           <Schedule />
-        </main>
+        </Wrapper>
       </Layout>
     );
 

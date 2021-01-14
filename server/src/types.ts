@@ -75,6 +75,16 @@ export const User = objectType({
         });
       },
     });
+    t.list.field('profile', {
+      type: 'Profile',
+      async resolve(root, _args, ctx) {
+        const profile = await ctx.prisma.profile.findUnique({
+          where: {
+            userId: root.id,
+          },
+        });
+      },
+    });
   },
 });
 
@@ -539,6 +549,32 @@ export const meetingById = queryField('meetingById', {
     return ctx.prisma.meeting.findUnique({
       where: {
         id: args.id,
+      },
+    });
+  },
+});
+
+export const meetingsByUser = queryField('meetingsByUser', {
+  type: 'User',
+  args: {
+    id: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.user.findUnique({
+      where: {
+        id: args.id,
+      },
+      include: {
+        meetings: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            timeslot: true,
+            length: true,
+            users: true,
+          },
+        },
       },
     });
   },

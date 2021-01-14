@@ -19,11 +19,11 @@ model User {
 }
 
 model Profile {
-  id           Int        @id @default(autoincrement())
-  userId       Int        @unique
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
   picture      String
-  availability DateTime[]
-  user         User       @relation(fields: [userId], references: [id])
+  availability DateTime
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 model Meeting {

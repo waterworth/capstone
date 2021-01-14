@@ -3,20 +3,12 @@
 // Update subnav with Details / Availibility
 
 import React from 'react';
-import Header from '../../components/Header/Header';
-import { Subnav } from '../../components/Subnav/Subnav';
-import ProfileForm from '../../components/ProfileForm/';
+import ProfilePage from '../../components/Profile';
 
 interface ProfileProps {}
 
 const Profile: React.FC<ProfileProps> = ({}) => {
-  return (
-    <>
-      <Header title='Profile' />
-      <Subnav />
-      <ProfileForm />
-    </>
-  );
+  return <ProfilePage />;
 };
 
 export default Profile;

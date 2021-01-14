@@ -2,18 +2,26 @@ import { Formik, Form, FormikProps, Field } from 'formik';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
-import { CheckboxInput, FormInput } from '../FormInput/FormInput';
+import { FormInput } from '../FormInput/FormInput';
 import * as Yup from 'yup';
+import { useRegisterMutation } from '../../generated/graphql';
+import { useRouter } from 'next/router';
 
 interface RegisterFormProps {}
 
 const InputWrapper = styled.div`
   display: flex;
+  width: 30rem;
   gap: 2rem;
+`;
+const ButtonWrapper = styled.div`
+  margin-left: 7rem;
 `;
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
+  const router = useRouter();
   const [toggle, setToggle] = useState(false);
+  const [registerMutation] = useRegisterMutation({});
 
   const initialValues = {
     username: '',
@@ -34,8 +42,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
       .required('Password is Required'),
 
     email: Yup.string().email().required('Email is required'),
-
-    toggle: Yup.boolean().oneOf([true], 'Must Accept Terms and Conditions'),
   });
 
   return (
@@ -46,16 +52,27 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
         console.log(values);
         actions.setSubmitting(true);
 
-        // const response = await register({ variables: { options: values } });
-        // if (response.data?.register.errors) {
-        //   // console.log(toErrorMap(response.data.register.errors));
-        // } else if (response.data?.register.user) {
-        //   //router.push('/');
-        // }
+        const response = await registerMutation({
+          variables: {
+            username: values.username,
+            email: values.email,
+            password: values.password,
+            admin: values.isAdmin,
+          },
+        });
+        if (response.data?.createUser?.username) {
+          router.push('/');
+        }
       }}>
       {(props: FormikProps<any>) => (
         <Form>
-          <FormInput name='username' label='Username' placeholder='Username' />
+          <InputWrapper>
+            <FormInput
+              name='username'
+              label='Username'
+              placeholder='Username'
+            />
+          </InputWrapper>
           <InputWrapper>
             <FormInput
               name='email'
@@ -72,12 +89,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
               placeholder='Password'
             />
           </InputWrapper>
-          <CheckboxInput
-            name='toggle'
-            type='checkbox'
-            label='I agree to the Terms & Privacy Policy'
-          />
-          <Button content='Register' />
+          <ButtonWrapper>
+            <Button content='Register' />
+          </ButtonWrapper>
         </Form>
       )}
     </Formik>

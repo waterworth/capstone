@@ -1,23 +1,28 @@
-// TODO Make functional with meeting query
+// TODO
 // Add ability to change color of meeting to match category
 
 import React from 'react';
 import styled from 'styled-components';
+import formatDate from '../../util/dateFormatter';
 
-interface MeetingProps {}
+interface MeetingProps {
+  title: string;
+  timeslot: string;
+}
 
-export const Meeting: React.FC<MeetingProps> = ({}) => {
+export const Meeting: React.FC<MeetingProps> = (props) => {
+  const dateString = props.timeslot;
+
   return (
     <MeetingItem>
-      <Title>Meeting Title</Title>
-      <Timeslot>Meeting Timeslot</Timeslot>
+      <Title>{props.title}</Title>
+      <Timeslot>{formatDate(dateString)}</Timeslot>
     </MeetingItem>
   );
 };
 
 const MeetingItem = styled.section`
   width: 35rem;
-  margin-left: 3rem;
   margin-bottom: 5rem;
   border-radius: 0 1.5rem 1.5rem 0;
   color: white;

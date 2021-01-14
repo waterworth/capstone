@@ -1,4 +1,5 @@
 import Sidebar from './Sidebar/';
+import styled from 'styled-components';
 
 function Layout(props: any) {
   return (
@@ -13,13 +14,11 @@ function Layout(props: any) {
             padding: 0;
             margin: 0;
             font-family: 'Inter', sans-serif;
-            width: 100vw;
           }
           a {
             color: inherit;
             text-decoration: none;
           }
-
           * {
             box-sizing: border-box;
           }

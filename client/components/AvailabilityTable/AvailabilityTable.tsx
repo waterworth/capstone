@@ -31,7 +31,7 @@ const Week = ({}) => {
     <Wrapper>
       {days.map((day) => {
         return (
-          <Day>
+          <Day key={day}>
             <Header>{day}</Header>
             <Timeslot>All Day</Timeslot>
             <Timeslots />
@@ -46,7 +46,7 @@ const day = ({}) => {
   return (
     <TimeList>
       {timeslots.map((timeslot) => {
-        return <Timeslot>{timeslot}</Timeslot>;
+        return <Timeslot key={timeslot}>{timeslot}</Timeslot>;
       })}
     </TimeList>
   );

@@ -24,6 +24,7 @@ export type User = {
   isAdmin?: Maybe<Scalars['Boolean']>;
   hosting?: Maybe<Array<Maybe<Meeting>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
+  profile?: Maybe<Array<Maybe<Profile>>>;
 };
 
 export type Profile = {
@@ -77,6 +78,7 @@ export type Query = {
   me?: Maybe<User>;
   userById?: Maybe<User>;
   meetingById?: Maybe<Meeting>;
+  meetingsByUser?: Maybe<User>;
 };
 
 
@@ -86,6 +88,11 @@ export type QueryUserByIdArgs = {
 
 
 export type QueryMeetingByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryMeetingsByUserArgs = {
   id: Scalars['Int'];
 };
 
@@ -167,6 +174,13 @@ export type RegularMeetingFragment = (
 export type RegularUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email' | 'isAdmin'>
+  & { meetings?: Maybe<Array<Maybe<(
+    { __typename?: 'Meeting' }
+    & Pick<Meeting, 'id' | 'title' | 'description' | 'timeslot' | 'length'>
+  )>>>, profile?: Maybe<Array<Maybe<(
+    { __typename?: 'Profile' }
+    & Pick<Profile, 'picture' | 'availability'>
+  )>>> }
 );
 
 export type AddUsersToMeetingMutationVariables = Exact<{
@@ -356,13 +370,6 @@ export type UsersQuery = (
   { __typename?: 'Query' }
   & { users?: Maybe<Array<Maybe<(
     { __typename?: 'User' }
-    & { hosting?: Maybe<Array<Maybe<(
-      { __typename?: 'Meeting' }
-      & RegularMeetingFragment
-    )>>>, meetings?: Maybe<Array<Maybe<(
-      { __typename?: 'Meeting' }
-      & RegularMeetingFragment
-    )>>> }
     & RegularUserFragment
   )>>> }
 );
@@ -390,6 +397,17 @@ export const RegularUserFragmentDoc = gql`
   username
   email
   isAdmin
+  meetings {
+    id
+    title
+    description
+    timeslot
+    length
+  }
+  profile {
+    picture
+    availability
+  }
 }
     `;
 export const RegularMeetingFragmentDoc = gql`
@@ -858,16 +876,9 @@ export const UsersDocument = gql`
     query Users {
   users {
     ...RegularUser
-    hosting {
-      ...RegularMeeting
-    }
-    meetings {
-      ...RegularMeeting
-    }
   }
 }
-    ${RegularUserFragmentDoc}
-${RegularMeetingFragmentDoc}`;
+    ${RegularUserFragmentDoc}`;
 
 /**
  * __useUsersQuery__

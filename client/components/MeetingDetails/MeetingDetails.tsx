@@ -1,21 +1,23 @@
-// TODO Make functional with query
+// TODO Add user data from profile
 
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import formatDate from '../../util/dateFormatter';
 
 interface MeetingDetailsProps {
   length: number;
   description: string;
-  id: number;
+  id?: number;
   title: string;
   timeslot: string;
 }
 
-export const MeetingDetails: React.FC<MeetingDetailsProps> = ({}) => {
+export const MeetingDetails: React.FC<MeetingDetailsProps> = (props) => {
+  const dateString = props.timeslot;
   return (
     <Details>
-      <Title>Title</Title>
+      <Title>{props.title}</Title>
 
       <Section>
         <Subtitle>Members</Subtitle>
@@ -28,15 +30,15 @@ export const MeetingDetails: React.FC<MeetingDetailsProps> = ({}) => {
 
       <Section>
         <Subtitle>Time</Subtitle>
-        <p>Timeslot goes here</p>
+        <p>{formatDate(dateString)}</p>
 
         <Subtitle>Length</Subtitle>
-        <p>'Meeting length goes here' hour(s)</p>
+        <p>{props.length} hour(s)</p>
       </Section>
 
       <Section>
         <Subtitle>Description</Subtitle>
-        <p>Meeting description</p>
+        <p>{props.description}</p>
       </Section>
 
       <Section>

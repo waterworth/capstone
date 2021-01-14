@@ -3,12 +3,17 @@ import React from 'react';
 import Button from '../Button';
 import styled from 'styled-components';
 import { FormInput } from '../FormInput/FormInput';
+import { useMeQuery } from '../../generated/graphql';
 
 interface ProfileFormProps {}
 
 const Section = styled.section`
   display: flex;
   gap: 3rem;
+`;
+
+const FormSection = styled(Section)`
+  margin-left: -3rem;
 `;
 
 const Wrapper = styled.div`
@@ -30,6 +35,8 @@ const ImageReference = styled.a`
 `;
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
+  const { data, loading, error } = useMeQuery({});
+  console.log(data?.me.profile);
   return (
     <div>
       <h3>Profile Picture</h3>
@@ -56,7 +63,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
               <span>Images must be 250x250 for optimal usage.</span>
             </Wrapper>
           </Section>
-          <Section>
+          <FormSection>
             <FormInput
               name='username'
               type='username'
@@ -67,7 +74,9 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
               type='email'
               label='Email'
               placeholder='Email'></FormInput>
-          </Section>
+          </FormSection>
+
+          <Button content='Update'></Button>
         </Form>
       </Formik>
     </div>

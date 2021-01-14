@@ -8,6 +8,9 @@ export const bodyStyles = css`
   padding: 0;
   margin: 0;
   width: 100vw;
+  font-weight: 400;
+  text-decoration: none;
+  font-style: normal;
 
   font-family: 'Inter', sans-serif;
   a {

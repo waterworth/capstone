@@ -1,11 +1,5 @@
 query Users {
   users {
     ...RegularUser
-    hosting {
-      ...RegularMeeting
-    }
-    meetings {
-      ...RegularMeeting
-    }
   }
 }

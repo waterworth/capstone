@@ -3,4 +3,15 @@ fragment RegularUser on User {
   username
   email
   isAdmin
+  meetings {
+    id
+    title
+    description
+    timeslot
+    length
+  }
+  profile {
+    picture
+    availability
+  }
 }

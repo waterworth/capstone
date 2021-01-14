@@ -10,11 +10,15 @@ interface FormInputProps {
 const InputItem = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 1rem 3rem;
+  width: 100%;
 `;
 const CheckboxItem = styled.div`
   display: flex;
 `;
-const TextAreaItem = styled.div``;
+const TextAreaItem = styled.div`
+  padding: 1rem 3rem;
+`;
 
 const Input = styled.input`
   display: flex;
@@ -22,7 +26,7 @@ const Input = styled.input`
   border: 1px solid #000;
   border-radius: 0.85rem;
   font-size: 1rem;
-  width: 25rem;
+  width: 100%;
   height: 2.5rem;
   margin: 0.5rem 0 1rem 0;
 `;
@@ -41,12 +45,16 @@ const TextArea = styled.textarea`
 
 const Label = styled.label`
   margin-top: 2rem;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
   padding: 0;
+  font-weight: 600;
 `;
 
 const Error = styled.p`
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: ${(props) => props.theme.colours.red};
 `;
 

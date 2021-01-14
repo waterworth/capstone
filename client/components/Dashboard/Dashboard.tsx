@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../Header/';
 import Subnav from '../Subnav/';
@@ -12,12 +12,16 @@ const Wrapper = styled.main`
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100vh;
+  overflow: scroll;
 `;
 
 export const Dashboard = (props: any) => {
   const { data, loading } = useMeQuery();
   const router = useRouter();
   let body = null;
+
+  const [options, setOptions] = useState(['Schedule', 'Inbox', 'Messages']);
 
   if (loading) {
     return null;
@@ -28,7 +32,7 @@ export const Dashboard = (props: any) => {
       <Layout>
         <Wrapper>
           <Header title='Dashboard' />
-          <Subnav />
+          <Subnav options={options} />
           <Schedule />
         </Wrapper>
       </Layout>

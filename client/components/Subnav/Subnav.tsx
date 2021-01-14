@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import Button from '../Button';
 import { CreateMeetingButton } from '../Button/Button';
 
-interface SubnavProps {}
+interface SubnavProps {
+  options: string[];
+}
 
 const Wrapper = styled.nav`
   position: sticky;
@@ -31,13 +33,13 @@ const MenuItem = styled.li`
   font-size: 1.25rem;
 `;
 
-export const Subnav: React.FC<SubnavProps> = ({}) => {
+export const Subnav: React.FC<SubnavProps> = (props) => {
   return (
     <Wrapper>
       <Menu>
-        <MenuItem>Schedule</MenuItem>
-        <MenuItem>Inbox</MenuItem>
-        <MenuItem>Meetings</MenuItem>
+        {props.options.map((option) => (
+          <MenuItem key={option}>{option}</MenuItem>
+        ))}
       </Menu>
 
       <Link href='/create-meeting'>

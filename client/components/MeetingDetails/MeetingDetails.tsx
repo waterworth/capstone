@@ -60,7 +60,7 @@ const Details = styled.aside`
   flex-direction: column;
   flex-grow: 2;
   margin-right: 3rem;
-  border-top: 0.5rem solid ${(props) => props.theme.colours['lightblue-dark2']};
+  border-top: 0.5rem solid ${(props) => props.theme.colours['red-dark2']};
   overflow: scroll;
 `;
 

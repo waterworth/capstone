@@ -23,20 +23,15 @@ export const Dashboard = (props: any) => {
 
   const [options, setOptions] = useState(['Schedule', 'Inbox', 'Messages']);
 
-  if (loading) {
-    return null;
-  } else if (!data?.me) {
-    body = <Login />;
-  } else
-    body = (
-      <Layout>
-        <Wrapper>
-          <Header title='Dashboard' />
-          <Subnav options={options} />
-          <Schedule />
-        </Wrapper>
-      </Layout>
-    );
+  body = (
+    <Layout>
+      <Wrapper>
+        <Header title='Dashboard' />
+        <Subnav options={options} />
+        <Schedule />
+      </Wrapper>
+    </Layout>
+  );
 
   return <>{body}</>;
 };

@@ -25,7 +25,7 @@ export const Schedule: React.FC<ScheduleProps> = ({}) => {
   );
 
   const { data: meData } = useMeQuery();
-  const userId: any = meData?.me?.id;
+  const userId: number = 5;
   const { data, loading, error } = useUserByIdQuery({
     variables: {
       id: parseInt(userId),

@@ -137,9 +137,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({}) => {
                 placeholder='Password'
               />
               <Divider />
-              <ButtonWrapper>
-                <CenteredButton content='Sign in' type='submit' />
-              </ButtonWrapper>
+              <CenteredButton content='Sign in' type='submit' />
             </Form>
           )}
         </Formik>

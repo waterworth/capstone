@@ -7,7 +7,11 @@ import Login from '../components/Login';
 const Index = () => {
   const router = useRouter();
   const { data: medata } = useMeQuery();
-  return <>{!medata ? <Login /> : <Dashboard />}</>;
+  return (
+    <>
+      <Dashboard />
+    </>
+  );
 };
 
 export default Index;

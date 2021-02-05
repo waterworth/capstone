@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import Layout from '../components/Layout';
 import MeetingForm from '../components/MeetingForm';
 import { useIsAuth } from '../util/useIsAuth';
+import OldMeeting from '../components/OldMeeting/OldMeeting';
 
 interface MomentString {
   format: typeof moment;
@@ -24,7 +25,8 @@ const CreateMeeting: React.FC<{}> = ({}) => {
     <Layout>
       <Wrapper>
         <Header title='New Meeting' />
-        <MeetingForm />
+        {/* <MeetingForm /> */}
+        <OldMeeting />
       </Wrapper>
     </Layout>
   );

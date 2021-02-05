@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
+import { LogoutButton } from '../LogoutButton/LogoutButton';
 
 interface SidebarProps {}
 
@@ -85,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
         <Img src='https://via.placeholder.com/46' alt='userImage' />
         <Info>
           <UserName>{data?.me?.username}</UserName>
-          <UserRole>{data?.me?.isAdmin ? 'User' : 'Administrator'}</UserRole>
+          <UserRole>{data?.me?.isAdmin ? 'Administrator' : 'User'}</UserRole>
           {/* Investigate ^ this */}
         </Info>
       </Header>
@@ -97,6 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
           <Option>Meetings</Option>
         </Menu>
       </Nav>
+      <LogoutButton />
     </SidebarWrapper>
   );
 };

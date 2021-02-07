@@ -136,7 +136,10 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationCreateMeetingArgs = {
-  input?: Maybe<MeetingInput>;
+  title: Scalars['String'];
+  timeslot: Scalars['DateTime'];
+  description: Scalars['String'];
+  length: Scalars['Int'];
 };
 
 
@@ -165,10 +168,7 @@ export type RegularMeetingFragment = (
   & { host?: Maybe<(
     { __typename?: 'User' }
     & RegularUserFragment
-  )>, users?: Maybe<Array<Maybe<(
-    { __typename?: 'User' }
-    & RegularUserFragment
-  )>>> }
+  )> }
 );
 
 export type RegularUserFragment = (
@@ -219,7 +219,10 @@ export type ChangePasswordMutation = (
 );
 
 export type CreateMeetingMutationVariables = Exact<{
-  input: MeetingInput;
+  title: Scalars['String'];
+  description: Scalars['String'];
+  timeslot: Scalars['DateTime'];
+  length: Scalars['Int'];
 }>;
 
 
@@ -420,9 +423,6 @@ export const RegularMeetingFragmentDoc = gql`
   host {
     ...RegularUser
   }
-  users {
-    ...RegularUser
-  }
 }
     ${RegularUserFragmentDoc}`;
 export const AddUsersToMeetingDocument = gql`
@@ -497,8 +497,13 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateMeetingDocument = gql`
-    mutation CreateMeeting($input: MeetingInput!) {
-  createMeeting(input: $input) {
+    mutation CreateMeeting($title: String!, $description: String!, $timeslot: DateTime!, $length: Int!) {
+  createMeeting(
+    title: $title
+    description: $description
+    timeslot: $timeslot
+    length: $length
+  ) {
     ...RegularMeeting
   }
 }
@@ -518,7 +523,10 @@ export type CreateMeetingMutationFn = Apollo.MutationFunction<CreateMeetingMutat
  * @example
  * const [createMeetingMutation, { data, loading, error }] = useCreateMeetingMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      timeslot: // value for 'timeslot'
+ *      length: // value for 'length'
  *   },
  * });
  */

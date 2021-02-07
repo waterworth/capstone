@@ -1,4 +1,10 @@
-import { FormInput, CheckboxInput, TextAreaInput } from './FormInput';
+import {
+  FormInput,
+  CheckboxInput,
+  TextAreaInput,
+  NumberInput,
+} from './FormInput';
 export default FormInput;
 export { CheckboxInput };
 export { TextAreaInput };
+export { NumberInput };

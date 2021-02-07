@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useField } from 'formik';
 
-interface FormInputProps {
+export interface FormInputProps {
   [x: string]: any;
   name: string;
 }
@@ -17,6 +17,10 @@ const CheckboxItem = styled.div`
   display: flex;
 `;
 const TextAreaItem = styled.div`
+  padding: 1rem 3rem;
+`;
+
+const DatePicker = styled.div`
   padding: 1rem 3rem;
 `;
 
@@ -64,6 +68,17 @@ export const FormInput = ({ label, ...props }: FormInputProps) => {
     <InputItem>
       <Label htmlFor={props.name}>{label}</Label>
       <Input {...field} {...props} />
+      {meta.touched && meta.error ? <Error>{meta.error}</Error> : null}
+    </InputItem>
+  );
+};
+
+export const NumberInput = ({ label, ...props }: FormInputProps) => {
+  const [field, meta] = useField(props);
+  return (
+    <InputItem>
+      <Label htmlFor={props.name}>{label}</Label>
+      <Input type='number' {...field} {...props} />
       {meta.touched && meta.error ? <Error>{meta.error}</Error> : null}
     </InputItem>
   );

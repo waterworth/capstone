@@ -268,6 +268,7 @@ export const createUser = mutationField('createUser', {
       },
     });
     ctx.req.session.userId = user.id;
+    console.log(ctx.req.session);
 
     return user;
   },
@@ -412,16 +413,28 @@ export const forgotPassword = mutationField('forgotPassword', {
 });
 
 // TODO Investigate sessionID for hosts
+// Rewrite this whole thing
 export const createMeeting = mutationField('createMeeting', {
   type: 'Meeting',
   args: {
-    input: MeetingInput,
+    title: nonNull(stringArg()),
+    timeslot: nonNull(dateArg()),
+    description: nonNull(stringArg()),
+    length: nonNull(intArg()),
   },
-  resolve(_root, _args, ctx) {
-    return ctx.prisma.createMeeting({
-      data: arg({
-        type: 'MeetingInput',
-      }),
+  resolve(_root, args, ctx) {
+    return ctx.prisma.meeting.create({
+      data: {
+        title: args.title,
+        timeslot: args.timeslot,
+        description: args.description,
+        length: args.length,
+        host: {
+          connect: {
+            id: ctx.req.session.userId,
+          },
+        },
+      },
     });
   },
 });

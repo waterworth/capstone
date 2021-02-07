@@ -7,7 +7,4 @@ fragment RegularMeeting on Meeting {
   host {
     ...RegularUser
   }
-  users {
-    ...RegularUser
-  }
 }

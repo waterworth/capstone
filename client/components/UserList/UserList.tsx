@@ -11,6 +11,7 @@ import {
 
 interface UserListProps {
   meetingId: number;
+  refetch: any;
 }
 
 const Users = styled.ul`
@@ -29,8 +30,7 @@ const User = styled.li`
   }
 `;
 
-export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
-  const [attendance, setAttendance] = useState([]);
+export const UserList: React.FC<UserListProps> = ({ meetingId, refetch }) => {
   const { data } = useUsersQuery();
   const [addUsersToMeetingMutation] = useAddUsersToMeetingMutation({
     variables: {
@@ -64,6 +64,7 @@ export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
                     meetingId,
                   },
                 });
+                refetch();
               }
 
               // Check if the user is in the meeting.
@@ -80,6 +81,7 @@ export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
                     meetingId: meetingId,
                   },
                 });
+                refetch();
               }
               // Add the user to the meeting
               else {
@@ -89,6 +91,7 @@ export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
                     meetingId: meetingId,
                   },
                 });
+                refetch();
               }
             }}
             key={user?.id}>

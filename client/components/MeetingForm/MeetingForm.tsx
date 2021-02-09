@@ -8,11 +8,9 @@ import styled from 'styled-components';
 import Button from '../Button';
 import FormInput from '../FormInput';
 import { TextAreaInput, NumberInput } from '../FormInput/';
-import UserList from '../UserList';
 import { useRouter } from 'next/router';
 import { useCreateMeetingMutation } from '../../generated/graphql';
 import { Datepicker } from '../DatePicker/Datepicker';
-import { string } from 'yup/lib/locale';
 
 interface MeetingFormProps {}
 

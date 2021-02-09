@@ -1,6 +1,6 @@
 import { addBasePath } from 'next/dist/next-server/lib/router/router';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
@@ -21,11 +21,15 @@ const MeetingPage: React.FC<MeetingPageProps> = ({}) => {
   const { asPath } = useRouter();
   const meetingId = parseInt(asPath.split('/')[2]);
 
-  const { data } = useMeetingByIdQuery({
+  const { data, refetch } = useMeetingByIdQuery({
     variables: {
       id: meetingId,
     },
   });
+
+  const handleRefetch = () => {
+    refetch();
+  };
 
   return (
     <Layout>
@@ -45,7 +49,7 @@ const MeetingPage: React.FC<MeetingPageProps> = ({}) => {
         <h2>Description</h2>
         <p>{data?.meetingById?.description}</p>
         <h2>Add Users</h2>
-        <UserList meetingId={meetingId} />
+        <UserList refetch={handleRefetch} meetingId={meetingId} />
       </Wrapper>
     </Layout>
   );

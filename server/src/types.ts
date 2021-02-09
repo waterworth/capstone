@@ -501,6 +501,28 @@ export const addUsersToMeeting = mutationField('addUsersToMeeting', {
   },
 });
 
+export const removeUserFromMeeting = mutationField('removeUserFromMeeting', {
+  type: 'User',
+  args: {
+    userId: nonNull(intArg()),
+    meetingId: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.user.update({
+      where: { id: args.userId },
+      data: {
+        meetings: {
+          delete: {
+            userId_meetingId: {
+              userId: args.userId,
+              meetingId: args.meetingId,
+          },
+        },
+      },
+    });
+  },
+});
+
 // Queries
 
 export const Query = queryType({

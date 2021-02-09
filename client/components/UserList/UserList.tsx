@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useUsersQuery } from '../../generated/graphql';
+// TODO This is working, but there seems to be an issue with the CRUD
+// functionality when removing a user sometimes, Investigate.
 
-interface UserListProps {}
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import {
+  useAddUsersToMeetingMutation,
+  useMeetingByIdQuery,
+  useRemoveUserFromMeetingMutation,
+  useUsersQuery,
+} from '../../generated/graphql';
+
+interface UserListProps {
+  meetingId: number;
+}
 
 const Users = styled.ul`
   list-style: none;
@@ -20,17 +30,52 @@ const User = styled.li`
   }
 `;
 
-export const UserList: React.FC<UserListProps> = ({}) => {
+export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
   const [attendance, setAttendance] = useState([]);
-  console.log(attendance);
-  const { data, loading, error } = useUsersQuery();
+  const { data } = useUsersQuery();
+  const [addUsersToMeetingMutation] = useAddUsersToMeetingMutation({
+    variables: {
+      userId: 1,
+      meetingId: meetingId,
+    },
+  });
+
+  const [removeUserFromMeetingMutation] = useRemoveUserFromMeetingMutation({});
+
+  // Get this meeting programatically from meeting that was just made.
+  const { data: meetingData } = useMeetingByIdQuery({
+    variables: {
+      id: meetingId,
+    },
+  });
+
   return (
     <>
       <Users>
         {data?.users?.map((user) => (
           <User
-            onClick={(e) => {
-              setAttendance([...attendance, user?.username]);
+            onClick={async (e) => {
+              console.log('User List', meetingData!.meetingById!.users!);
+              console.log('User map', user);
+              await meetingData!.meetingById!.users?.filter(
+                async (userInMeeting) => {
+                  if (userInMeeting?.username == user?.username) {
+                    await removeUserFromMeetingMutation({
+                      variables: {
+                        userId: parseInt(user?.id as string),
+                        meetingId: meetingId,
+                      },
+                    });
+                  } else {
+                    await addUsersToMeetingMutation({
+                      variables: {
+                        userId: parseInt(user?.id as string),
+                        meetingId: meetingId,
+                      },
+                    });
+                  }
+                }
+              );
             }}
             key={user?.id}>
             {user?.username}

@@ -12,6 +12,7 @@ import UserList from '../UserList';
 import { useRouter } from 'next/router';
 import { useCreateMeetingMutation } from '../../generated/graphql';
 import { Datepicker } from '../DatePicker/Datepicker';
+import { string } from 'yup/lib/locale';
 
 interface MeetingFormProps {}
 
@@ -26,7 +27,6 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({}) => {
   const router = useRouter();
   const [createMeeting] = useCreateMeetingMutation();
   const [timeslot, setTimeslot] = useState('');
-  const [submitted, setSubmitted] = useState(false);
 
   const handleTimeslotChange = (time: string) => {
     setTimeslot(time);
@@ -41,7 +41,7 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({}) => {
         console.log(timeslot, typeof timeslot);
         console.log(length, typeof length);
         console.log(description, typeof description);
-        const { errors } = await createMeeting({
+        const { data, errors } = await createMeeting({
           variables: {
             title: title,
             timeslot: timeslot,
@@ -50,10 +50,9 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({}) => {
           },
         });
         if (!errors) {
-          setSubmitted(true);
+          router.push(('/meeting/' + data?.createMeeting?.id) as string);
         }
-        console.log(errors);
-        await console.log({ title, length, description, timeslot });
+        await console.log(data?.createMeeting?.id);
       }}>
       {(props: FormikProps<MeetingFormProps>) => (
         <FormWrapper>

@@ -1,5 +1,4 @@
-// TODO This is working, but there seems to be an issue with the CRUD
-// functionality when removing a user sometimes, Investigate.
+// TODO Update the page to rerender / call the meeting by id query on click
 
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -43,6 +42,7 @@ export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
   const [removeUserFromMeetingMutation] = useRemoveUserFromMeetingMutation({});
 
   // Get this meeting programatically from meeting that was just made.
+
   const { data: meetingData } = useMeetingByIdQuery({
     variables: {
       id: meetingId,
@@ -55,27 +55,41 @@ export const UserList: React.FC<UserListProps> = ({ meetingId }) => {
         {data?.users?.map((user) => (
           <User
             onClick={async (e) => {
-              console.log('User List', meetingData!.meetingById!.users!);
-              console.log('User map', user);
-              await meetingData!.meetingById!.users?.filter(
-                async (userInMeeting) => {
-                  if (userInMeeting?.username == user?.username) {
-                    await removeUserFromMeetingMutation({
-                      variables: {
-                        userId: parseInt(user?.id as string),
-                        meetingId: meetingId,
-                      },
-                    });
-                  } else {
-                    await addUsersToMeetingMutation({
-                      variables: {
-                        userId: parseInt(user?.id as string),
-                        meetingId: meetingId,
-                      },
-                    });
-                  }
-                }
-              );
+              // Check if usersinmeeting is empty array.
+              // If true, add the user to meeting
+              if (meetingData!.meetingById!.users!.length < 1) {
+                await addUsersToMeetingMutation({
+                  variables: {
+                    userId: parseInt(user?.id as string),
+                    meetingId,
+                  },
+                });
+              }
+
+              // Check if the user is in the meeting.
+              // If so remove the user to the meeting
+              const userInMeeting = meetingData!.meetingById!.users;
+              if (
+                userInMeeting?.some(
+                  (userInMeeting) => userInMeeting!.username == user?.username
+                )
+              ) {
+                await removeUserFromMeetingMutation({
+                  variables: {
+                    userId: parseInt(user?.id as string),
+                    meetingId: meetingId,
+                  },
+                });
+              }
+              // Add the user to the meeting
+              else {
+                await addUsersToMeetingMutation({
+                  variables: {
+                    userId: parseInt(user?.id as string),
+                    meetingId: meetingId,
+                  },
+                });
+              }
             }}
             key={user?.id}>
             {user?.username}

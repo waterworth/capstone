@@ -1,4 +1,4 @@
-// TODO Update the page to rerender / call the meeting by id query on click
+// TODO Figure out the unique field constraints on adding and removing a user
 
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';

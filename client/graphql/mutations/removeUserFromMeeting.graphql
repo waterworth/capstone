@@ -1,0 +1,5 @@
+mutation RemoveUserFromMeeting($userId: Int!, $meetingId: Int!) {
+  removeUserFromMeeting(userId: $userId, meetingId: $meetingId) {
+    username
+  }
+}

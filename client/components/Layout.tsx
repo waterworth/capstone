@@ -1,9 +1,15 @@
 import Sidebar from './Sidebar/';
 import styled from 'styled-components';
 
+const LayoutWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+`;
+
 function Layout(props: any) {
   return (
-    <div className='page-layout'>
+    <LayoutWrapper>
       <Sidebar />
       {props.children}
       <style jsx global>
@@ -22,14 +28,9 @@ function Layout(props: any) {
           * {
             box-sizing: border-box;
           }
-          .page-layout {
-            display: flex;
-            flex-direction: row;
-            width: 100vw;
-          }
         `}
       </style>
-    </div>
+    </LayoutWrapper>
   );
 }
 

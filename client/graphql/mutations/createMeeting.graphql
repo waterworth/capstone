@@ -1,5 +1,15 @@
-mutation CreateMeeting($input: MeetingInput!) {
-  createMeeting(input: $input) {
+mutation CreateMeeting(
+  $title: String!
+  $description: String!
+  $timeslot: DateTime!
+  $length: Int!
+) {
+  createMeeting(
+    title: $title
+    description: $description
+    timeslot: $timeslot
+    length: $length
+  ) {
     ...RegularMeeting
   }
 }

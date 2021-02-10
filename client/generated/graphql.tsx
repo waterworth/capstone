@@ -107,6 +107,7 @@ export type Mutation = {
   updateMeeting?: Maybe<Meeting>;
   deleteMeeting?: Maybe<Meeting>;
   addUsersToMeeting?: Maybe<UsersInMeeting>;
+  removeUserFromMeeting?: Maybe<User>;
 };
 
 
@@ -136,7 +137,10 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationCreateMeetingArgs = {
-  input?: Maybe<MeetingInput>;
+  title: Scalars['String'];
+  timeslot: Scalars['DateTime'];
+  description: Scalars['String'];
+  length: Scalars['Int'];
 };
 
 
@@ -155,6 +159,12 @@ export type MutationDeleteMeetingArgs = {
 
 
 export type MutationAddUsersToMeetingArgs = {
+  userId: Scalars['Int'];
+  meetingId: Scalars['Int'];
+};
+
+
+export type MutationRemoveUserFromMeetingArgs = {
   userId: Scalars['Int'];
   meetingId: Scalars['Int'];
 };
@@ -219,7 +229,10 @@ export type ChangePasswordMutation = (
 );
 
 export type CreateMeetingMutationVariables = Exact<{
-  input: MeetingInput;
+  title: Scalars['String'];
+  description: Scalars['String'];
+  timeslot: Scalars['DateTime'];
+  length: Scalars['Int'];
 }>;
 
 
@@ -295,6 +308,20 @@ export type RegisterMutation = (
   & { createUser?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email' | 'isAdmin'>
+  )> }
+);
+
+export type RemoveUserFromMeetingMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  meetingId: Scalars['Int'];
+}>;
+
+
+export type RemoveUserFromMeetingMutation = (
+  { __typename?: 'Mutation' }
+  & { removeUserFromMeeting?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'username'>
   )> }
 );
 
@@ -497,8 +524,13 @@ export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswo
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateMeetingDocument = gql`
-    mutation CreateMeeting($input: MeetingInput!) {
-  createMeeting(input: $input) {
+    mutation CreateMeeting($title: String!, $description: String!, $timeslot: DateTime!, $length: Int!) {
+  createMeeting(
+    title: $title
+    description: $description
+    timeslot: $timeslot
+    length: $length
+  ) {
     ...RegularMeeting
   }
 }
@@ -518,7 +550,10 @@ export type CreateMeetingMutationFn = Apollo.MutationFunction<CreateMeetingMutat
  * @example
  * const [createMeetingMutation, { data, loading, error }] = useCreateMeetingMutation({
  *   variables: {
- *      input: // value for 'input'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      timeslot: // value for 'timeslot'
+ *      length: // value for 'length'
  *   },
  * });
  */
@@ -700,6 +735,39 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const RemoveUserFromMeetingDocument = gql`
+    mutation RemoveUserFromMeeting($userId: Int!, $meetingId: Int!) {
+  removeUserFromMeeting(userId: $userId, meetingId: $meetingId) {
+    username
+  }
+}
+    `;
+export type RemoveUserFromMeetingMutationFn = Apollo.MutationFunction<RemoveUserFromMeetingMutation, RemoveUserFromMeetingMutationVariables>;
+
+/**
+ * __useRemoveUserFromMeetingMutation__
+ *
+ * To run a mutation, you first call `useRemoveUserFromMeetingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveUserFromMeetingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeUserFromMeetingMutation, { data, loading, error }] = useRemoveUserFromMeetingMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      meetingId: // value for 'meetingId'
+ *   },
+ * });
+ */
+export function useRemoveUserFromMeetingMutation(baseOptions?: Apollo.MutationHookOptions<RemoveUserFromMeetingMutation, RemoveUserFromMeetingMutationVariables>) {
+        return Apollo.useMutation<RemoveUserFromMeetingMutation, RemoveUserFromMeetingMutationVariables>(RemoveUserFromMeetingDocument, baseOptions);
+      }
+export type RemoveUserFromMeetingMutationHookResult = ReturnType<typeof useRemoveUserFromMeetingMutation>;
+export type RemoveUserFromMeetingMutationResult = Apollo.MutationResult<RemoveUserFromMeetingMutation>;
+export type RemoveUserFromMeetingMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromMeetingMutation, RemoveUserFromMeetingMutationVariables>;
 export const UpdateMeetingDocument = gql`
     mutation UpdateMeeting($id: Int!, $title: String!, $timeslot: DateTime!, $length: Int!, $description: String!) {
   updateMeeting(

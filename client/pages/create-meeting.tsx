@@ -25,8 +25,8 @@ const CreateMeeting: React.FC<{}> = ({}) => {
     <Layout>
       <Wrapper>
         <Header title='New Meeting' />
-        {/* <MeetingForm /> */}
-        <OldMeeting />
+        <MeetingForm />
+        {/* <OldMeeting /> */}
       </Wrapper>
     </Layout>
   );

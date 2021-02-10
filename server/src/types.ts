@@ -516,6 +516,7 @@ export const removeUserFromMeeting = mutationField('removeUserFromMeeting', {
             userId_meetingId: {
               userId: args.userId,
               meetingId: args.meetingId,
+            },
           },
         },
       },

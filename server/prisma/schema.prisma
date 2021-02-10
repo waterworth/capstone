@@ -16,6 +16,7 @@ model User {
   hosting  Meeting[]
   Profile  Profile?
   meetings UsersInMeeting[]
+  teams    UsersInTeam[]
 }
 
 model Profile {
@@ -37,6 +38,21 @@ model Meeting {
   updatedAt   DateTime         @default(now())
   host        User             @relation(fields: [hostId], references: [id])
   users       UsersInMeeting[]
+}
+
+model Team {
+  id    Int           @id @default(autoincrement())
+  name  String
+  users UsersInTeam[]
+}
+
+model UsersInTeam {
+  userId Int
+  teamId Int
+  user   User @relation(fields: [userId], references: [id])
+  team   Team @relation(fields: [teamId], references: [id])
+
+  @@id([userId, teamId])
 }
 
 model UsersInMeeting {

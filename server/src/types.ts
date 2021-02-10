@@ -189,6 +189,79 @@ export const Meeting = objectType({
   },
 });
 
+// Team Object type
+
+export const Team = objectType({
+  name: 'Team',
+  definition(t) {
+    t.int('id');
+    t.string('name', {
+      resolve(parent) {
+        return parent.name;
+      },
+    });
+    t.list.field('users', {
+      type: 'User',
+      async resolve(root, _args, ctx) {
+        const users = await ctx.prisma.usersInTeam.findMany({
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                email: true,
+              },
+            },
+          },
+          where: {
+            teamId: root.id,
+          },
+        });
+        return users.map((user: any) => {
+          return user.user;
+        });
+      },
+    });
+  },
+});
+
+// UsersInTeam Object Type
+export const UsersInTeam = objectType({
+  name: 'UsersInTeam',
+  definition(t) {
+    t.int('userId', {
+      resolve(parent) {
+        return parent.userId;
+      },
+    });
+    t.int('teamId', {
+      resolve(parent) {
+        return parent.teamId;
+      },
+    });
+    t.field('user', {
+      type: 'User',
+      resolve(root, _args, ctx) {
+        return ctx.prisma.user.findUnique({
+          where: {
+            id: root.userId,
+          },
+        });
+      },
+    });
+    t.field('team', {
+      type: 'Team',
+      resolve(root, _args, ctx) {
+        return ctx.prisma.team.findUnique({
+          where: {
+            id: root.teamId,
+          },
+        });
+      },
+    });
+  },
+});
+
 // UsersInMeeting Object Type
 
 export const UsersInMeeting = objectType({
@@ -544,6 +617,18 @@ export const Query = queryType({
       type: 'UsersInMeeting',
       resolve(_root, _args, ctx) {
         return ctx.prisma.usersInMeeting.findMany();
+      },
+    });
+    t.list.field('teams', {
+      type: 'Team',
+      resolve(_root, _args, ctx) {
+        return ctx.prisma.team.findMany();
+      },
+    });
+    t.list.field('usersInTeam', {
+      type: 'UsersInTeam',
+      resolve(_root, _args, ctx) {
+        return ctx.prisma.usersInTeam.findMany();
       },
     });
   },

@@ -25,14 +25,12 @@ export const Schedule: React.FC<ScheduleProps> = ({}) => {
   );
 
   const { data: meData } = useMeQuery();
-  const userId: number = 5;
-  const { data, loading, error } = useUserByIdQuery({
+  const userId: number = parseInt(meData?.me?.id as string);
+  const { data } = useUserByIdQuery({
     variables: {
-      id: parseInt(userId),
+      id: userId,
     },
   });
-
-  console.log(meetingDetails);
 
   const date = new Date()
     .toString()
@@ -49,8 +47,11 @@ export const Schedule: React.FC<ScheduleProps> = ({}) => {
           <h2>Loading...</h2>
         ) : (
           data?.userById?.meetings?.map((meeting) => (
-            <section onClick={(e) => setMeetingDetails(meeting)}>
-              <Meeting title={meeting?.title} timeslot={meeting?.timeslot} />
+            <section onClick={(e) => setMeetingDetails(meeting as any)}>
+              <Meeting
+                title={meeting?.title as string}
+                timeslot={meeting?.timeslot}
+              />
             </section>
           ))
         )}

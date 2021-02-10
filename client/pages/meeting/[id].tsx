@@ -1,6 +1,5 @@
-import { addBasePath } from 'next/dist/next-server/lib/router/router';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';

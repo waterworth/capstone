@@ -1,6 +1,6 @@
 // TODO Figure out the unique field constraints on adding and removing a user
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   useAddUsersToMeetingMutation,

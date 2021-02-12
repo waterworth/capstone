@@ -2,7 +2,6 @@ fragment RegularUser on User {
   id
   username
   email
-  isAdmin
   meetings {
     id
     title

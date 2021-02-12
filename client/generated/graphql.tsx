@@ -21,7 +21,6 @@ export type User = {
   id?: Maybe<Scalars['ID']>;
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  isAdmin?: Maybe<Scalars['Boolean']>;
   hosting?: Maybe<Array<Maybe<Meeting>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
   profile?: Maybe<Array<Maybe<Profile>>>;
@@ -48,6 +47,23 @@ export type Meeting = {
   users?: Maybe<Array<Maybe<User>>>;
 };
 
+export type Team = {
+  __typename?: 'Team';
+  id?: Maybe<Scalars['Int']>;
+  adminUserId?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  admin?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
+};
+
+export type UsersInTeam = {
+  __typename?: 'UsersInTeam';
+  userId?: Maybe<Scalars['Int']>;
+  teamId?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
+  team?: Maybe<Team>;
+};
+
 export type UsersInMeeting = {
   __typename?: 'UsersInMeeting';
   userId?: Maybe<Scalars['Int']>;
@@ -67,7 +83,6 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
   password: Scalars['String'];
   email: Scalars['String'];
-  isAdmin?: Maybe<Scalars['Boolean']>;
 };
 
 export type Query = {
@@ -75,6 +90,8 @@ export type Query = {
   users?: Maybe<Array<Maybe<User>>>;
   meetings?: Maybe<Array<Maybe<Meeting>>>;
   usersInMeeting?: Maybe<Array<Maybe<UsersInMeeting>>>;
+  teams?: Maybe<Array<Maybe<Team>>>;
+  usersInTeam?: Maybe<Array<Maybe<UsersInTeam>>>;
   me?: Maybe<User>;
   userById?: Maybe<User>;
   meetingById?: Maybe<Meeting>;
@@ -108,6 +125,8 @@ export type Mutation = {
   deleteMeeting?: Maybe<Meeting>;
   addUsersToMeeting?: Maybe<UsersInMeeting>;
   removeUserFromMeeting?: Maybe<User>;
+  createTeam?: Maybe<Team>;
+  addUserToTeam?: Maybe<UsersInTeam>;
 };
 
 
@@ -115,7 +134,6 @@ export type MutationCreateUserArgs = {
   username: Scalars['String'];
   password: Scalars['String'];
   email: Scalars['String'];
-  isAdmin: Scalars['Boolean'];
 };
 
 
@@ -169,6 +187,17 @@ export type MutationRemoveUserFromMeetingArgs = {
   meetingId: Scalars['Int'];
 };
 
+
+export type MutationCreateTeamArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationAddUserToTeamArgs = {
+  userId: Scalars['Int'];
+  teamId: Scalars['Int'];
+};
+
 export type RegularMeetingFragment = (
   { __typename?: 'Meeting' }
   & Pick<Meeting, 'id' | 'title' | 'description' | 'timeslot' | 'length'>
@@ -183,7 +212,7 @@ export type RegularMeetingFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'isAdmin'>
+  & Pick<User, 'id' | 'username' | 'email'>
   & { meetings?: Maybe<Array<Maybe<(
     { __typename?: 'Meeting' }
     & Pick<Meeting, 'id' | 'title' | 'description' | 'timeslot' | 'length'>
@@ -210,6 +239,30 @@ export type AddUsersToMeetingMutation = (
         { __typename?: 'User' }
         & RegularUserFragment
       )>>> }
+    )> }
+  )> }
+);
+
+export type AddUserToTeamMutationVariables = Exact<{
+  userId: Scalars['Int'];
+  teamId: Scalars['Int'];
+}>;
+
+
+export type AddUserToTeamMutation = (
+  { __typename?: 'Mutation' }
+  & { addUserToTeam?: Maybe<(
+    { __typename?: 'UsersInTeam' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )>, team?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'name'>
+      & { admin?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'username'>
+      )> }
     )> }
   )> }
 );
@@ -241,6 +294,19 @@ export type CreateMeetingMutation = (
   & { createMeeting?: Maybe<(
     { __typename?: 'Meeting' }
     & RegularMeetingFragment
+  )> }
+);
+
+export type CreateTeamMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreateTeamMutation = (
+  { __typename?: 'Mutation' }
+  & { createTeam?: Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'id' | 'name'>
   )> }
 );
 
@@ -299,7 +365,6 @@ export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  admin: Scalars['Boolean'];
 }>;
 
 
@@ -307,7 +372,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { createUser?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'email' | 'isAdmin'>
+    & Pick<User, 'id' | 'username' | 'email'>
   )> }
 );
 
@@ -377,6 +442,24 @@ export type MeetingsQuery = (
   )>>> }
 );
 
+export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TeamsQuery = (
+  { __typename?: 'Query' }
+  & { teams?: Maybe<Array<Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'id' | 'name'>
+    & { users?: Maybe<Array<Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    )>>>, admin?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    )> }
+  )>>> }
+);
+
 export type UserByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -423,7 +506,6 @@ export const RegularUserFragmentDoc = gql`
   id
   username
   email
-  isAdmin
   meetings {
     id
     title
@@ -490,6 +572,47 @@ export function useAddUsersToMeetingMutation(baseOptions?: Apollo.MutationHookOp
 export type AddUsersToMeetingMutationHookResult = ReturnType<typeof useAddUsersToMeetingMutation>;
 export type AddUsersToMeetingMutationResult = Apollo.MutationResult<AddUsersToMeetingMutation>;
 export type AddUsersToMeetingMutationOptions = Apollo.BaseMutationOptions<AddUsersToMeetingMutation, AddUsersToMeetingMutationVariables>;
+export const AddUserToTeamDocument = gql`
+    mutation AddUserToTeam($userId: Int!, $teamId: Int!) {
+  addUserToTeam(userId: $userId, teamId: $teamId) {
+    user {
+      ...RegularUser
+    }
+    team {
+      name
+      admin {
+        username
+      }
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+export type AddUserToTeamMutationFn = Apollo.MutationFunction<AddUserToTeamMutation, AddUserToTeamMutationVariables>;
+
+/**
+ * __useAddUserToTeamMutation__
+ *
+ * To run a mutation, you first call `useAddUserToTeamMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddUserToTeamMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUserToTeamMutation, { data, loading, error }] = useAddUserToTeamMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useAddUserToTeamMutation(baseOptions?: Apollo.MutationHookOptions<AddUserToTeamMutation, AddUserToTeamMutationVariables>) {
+        return Apollo.useMutation<AddUserToTeamMutation, AddUserToTeamMutationVariables>(AddUserToTeamDocument, baseOptions);
+      }
+export type AddUserToTeamMutationHookResult = ReturnType<typeof useAddUserToTeamMutation>;
+export type AddUserToTeamMutationResult = Apollo.MutationResult<AddUserToTeamMutation>;
+export type AddUserToTeamMutationOptions = Apollo.BaseMutationOptions<AddUserToTeamMutation, AddUserToTeamMutationVariables>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -563,6 +686,39 @@ export function useCreateMeetingMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMeetingMutationHookResult = ReturnType<typeof useCreateMeetingMutation>;
 export type CreateMeetingMutationResult = Apollo.MutationResult<CreateMeetingMutation>;
 export type CreateMeetingMutationOptions = Apollo.BaseMutationOptions<CreateMeetingMutation, CreateMeetingMutationVariables>;
+export const CreateTeamDocument = gql`
+    mutation CreateTeam($name: String!) {
+  createTeam(name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type CreateTeamMutationFn = Apollo.MutationFunction<CreateTeamMutation, CreateTeamMutationVariables>;
+
+/**
+ * __useCreateTeamMutation__
+ *
+ * To run a mutation, you first call `useCreateTeamMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTeamMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTeamMutation, { data, loading, error }] = useCreateTeamMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateTeamMutation(baseOptions?: Apollo.MutationHookOptions<CreateTeamMutation, CreateTeamMutationVariables>) {
+        return Apollo.useMutation<CreateTeamMutation, CreateTeamMutationVariables>(CreateTeamDocument, baseOptions);
+      }
+export type CreateTeamMutationHookResult = ReturnType<typeof useCreateTeamMutation>;
+export type CreateTeamMutationResult = Apollo.MutationResult<CreateTeamMutation>;
+export type CreateTeamMutationOptions = Apollo.BaseMutationOptions<CreateTeamMutation, CreateTeamMutationVariables>;
 export const DeleteMeetingDocument = gql`
     mutation DeleteMeeting($id: Int!) {
   deleteMeeting(id: $id) {
@@ -693,17 +849,11 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $password: String!, $admin: Boolean!) {
-  createUser(
-    username: $username
-    email: $email
-    password: $password
-    isAdmin: $admin
-  ) {
+    mutation Register($username: String!, $email: String!, $password: String!) {
+  createUser(username: $username, email: $email, password: $password) {
     id
     username
     email
-    isAdmin
   }
 }
     `;
@@ -725,7 +875,6 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *      username: // value for 'username'
  *      email: // value for 'email'
  *      password: // value for 'password'
- *      admin: // value for 'admin'
  *   },
  * });
  */
@@ -907,6 +1056,45 @@ export function useMeetingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<M
 export type MeetingsQueryHookResult = ReturnType<typeof useMeetingsQuery>;
 export type MeetingsLazyQueryHookResult = ReturnType<typeof useMeetingsLazyQuery>;
 export type MeetingsQueryResult = Apollo.QueryResult<MeetingsQuery, MeetingsQueryVariables>;
+export const TeamsDocument = gql`
+    query Teams {
+  teams {
+    id
+    name
+    users {
+      username
+    }
+    admin {
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useTeamsQuery__
+ *
+ * To run a query within a React component, call `useTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTeamsQuery(baseOptions?: Apollo.QueryHookOptions<TeamsQuery, TeamsQueryVariables>) {
+        return Apollo.useQuery<TeamsQuery, TeamsQueryVariables>(TeamsDocument, baseOptions);
+      }
+export function useTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamsQuery, TeamsQueryVariables>) {
+          return Apollo.useLazyQuery<TeamsQuery, TeamsQueryVariables>(TeamsDocument, baseOptions);
+        }
+export type TeamsQueryHookResult = ReturnType<typeof useTeamsQuery>;
+export type TeamsLazyQueryHookResult = ReturnType<typeof useTeamsLazyQuery>;
+export type TeamsQueryResult = Apollo.QueryResult<TeamsQuery, TeamsQueryVariables>;
 export const UserByIdDocument = gql`
     query UserById($id: Int!) {
   userById(id: $id) {

@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id       Int              @id @default(autoincrement())
-  username String           @unique
-  email    String           @unique
-  password String
-  isAdmin  Boolean          @default(false)
-  hosting  Meeting[]
-  Profile  Profile?
-  meetings UsersInMeeting[]
+  id           Int              @id @default(autoincrement())
+  username     String           @unique
+  email        String           @unique
+  password     String
+  hosting      Meeting[]
+  Profile      Profile?
+  meetings     UsersInMeeting[]
+  teams        UsersInTeam[]
+  TeamsCreated Team[]
 }
 
 model Profile {
@@ -37,6 +38,23 @@ model Meeting {
   updatedAt   DateTime         @default(now())
   host        User             @relation(fields: [hostId], references: [id])
   users       UsersInMeeting[]
+}
+
+model Team {
+  id          Int           @id @default(autoincrement())
+  name        String
+  admin       User          @relation(fields: [adminUserId], references: [id])
+  users       UsersInTeam[]
+  adminUserId Int           @default(2)
+}
+
+model UsersInTeam {
+  userId Int
+  teamId Int
+  user   User @relation(fields: [userId], references: [id])
+  team   Team @relation(fields: [teamId], references: [id])
+
+  @@id([userId, teamId])
 }
 
 model UsersInMeeting {

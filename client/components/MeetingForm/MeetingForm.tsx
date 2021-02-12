@@ -35,10 +35,6 @@ export const MeetingForm: React.FC<MeetingFormProps> = ({}) => {
     <Formik
       initialValues={initialValues}
       onSubmit={async ({ title, length, description }) => {
-        console.log(title, typeof title);
-        console.log(timeslot, typeof timeslot);
-        console.log(length, typeof length);
-        console.log(description, typeof description);
         const { data, errors } = await createMeeting({
           variables: {
             title: title,

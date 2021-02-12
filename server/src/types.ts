@@ -36,11 +36,7 @@ export const User = objectType({
         return parent.email;
       },
     });
-    t.boolean('isAdmin', {
-      resolve(parent) {
-        return parent.isAdmin;
-      },
-    });
+
     t.list.field('hosting', {
       type: 'Meeting',
       resolve(root, _args, ctx) {
@@ -195,9 +191,24 @@ export const Team = objectType({
   name: 'Team',
   definition(t) {
     t.int('id');
+    t.int('adminUserId', {
+      resolve(parent) {
+        return parent.adminUserId;
+      },
+    });
     t.string('name', {
       resolve(parent) {
         return parent.name;
+      },
+    });
+    t.field('admin', {
+      type: 'User',
+      resolve(root, _args, ctx) {
+        return ctx.prisma.user.findUnique({
+          where: {
+            id: root.adminUserId,
+          },
+        });
       },
     });
     t.list.field('users', {
@@ -317,7 +328,6 @@ export const UsernamePasswordInput = inputObjectType({
     t.nonNull.string('username');
     t.nonNull.string('password');
     t.nonNull.string('email');
-    t.boolean('isAdmin');
   },
 });
 // Mutations
@@ -328,7 +338,6 @@ export const createUser = mutationField('createUser', {
     username: nonNull(stringArg()),
     password: nonNull(stringArg()),
     email: nonNull(stringArg()),
-    isAdmin: nonNull(booleanArg()),
   },
   async resolve(_root, args, ctx) {
     const hasedPassword = await argon2.hash(args.password);
@@ -337,7 +346,6 @@ export const createUser = mutationField('createUser', {
         username: args.username,
         password: hasedPassword,
         email: args.email,
-        isAdmin: args.isAdmin,
       },
     });
     ctx.req.session.userId = user.id;
@@ -591,6 +599,45 @@ export const removeUserFromMeeting = mutationField('removeUserFromMeeting', {
               meetingId: args.meetingId,
             },
           },
+        },
+      },
+    });
+  },
+});
+
+export const createTeam = mutationField('createTeam', {
+  type: 'Team',
+  args: {
+    name: nonNull(stringArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.team.create({
+      data: {
+        name: args.name,
+        admin: {
+          connect: {
+            id: ctx.req.session.userId,
+          },
+        },
+      },
+    });
+  },
+});
+
+export const addUserToTeam = mutationField('addUserToTeam', {
+  type: 'UsersInTeam',
+  args: {
+    userId: nonNull(intArg()),
+    teamId: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.usersInTeam.create({
+      data: {
+        user: {
+          connect: { id: args.userId },
+        },
+        team: {
+          connect: { id: args.teamId },
         },
       },
     });

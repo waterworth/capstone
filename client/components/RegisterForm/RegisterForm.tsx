@@ -20,7 +20,6 @@ const ButtonWrapper = styled.div`
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
   const router = useRouter();
-  const [toggle, setToggle] = useState(false);
   const [registerMutation] = useRegisterMutation({});
 
   const initialValues = {
@@ -57,11 +56,10 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
             username: values.username,
             email: values.email,
             password: values.password,
-            admin: values.isAdmin,
           },
         });
         if (response.data?.createUser?.username) {
-          router.push('/');
+          router.push('/teams');
         }
       }}>
       {(props: FormikProps<any>) => (

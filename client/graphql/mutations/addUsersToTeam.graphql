@@ -1,0 +1,13 @@
+mutation AddUserToTeam($userId: Int!, $teamId: Int!) {
+  addUserToTeam(userId: $userId, teamId: $teamId) {
+    user {
+      ...RegularUser
+    }
+    team {
+      name
+      admin {
+        username
+      }
+    }
+  }
+}

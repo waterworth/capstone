@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {
   useAddUsersToMeetingMutation,
   useMeetingByIdQuery,
+  useMeQuery,
   useRemoveUserFromMeetingMutation,
   useUsersQuery,
 } from '../../generated/graphql';
@@ -32,9 +33,10 @@ const User = styled.li`
 
 export const UserList: React.FC<UserListProps> = ({ meetingId, refetch }) => {
   const { data } = useUsersQuery();
+  const { data: meData } = useMeQuery();
   const [addUsersToMeetingMutation] = useAddUsersToMeetingMutation({
     variables: {
-      userId: 1,
+      userId: parseInt(meData?.me?.id!),
       meetingId: meetingId,
     },
   });

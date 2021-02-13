@@ -1,0 +1,7 @@
+mutation CreateProfile($userId: Int!) {
+  createProfile(userId: $userId) {
+    user {
+      ...RegularUser
+    }
+  }
+}

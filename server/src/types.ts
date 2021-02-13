@@ -16,6 +16,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { COOKIE__NAME, FORGET__PASSWORD__PREFIX } from './constants';
 import { sendEmail } from './util/sendEmail';
+import { uploadImage } from './util/uploadImage';
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'datetime');
 const dateArg = () => arg({ type: 'DateTime' });
@@ -109,7 +110,7 @@ export const Profile = objectType({
     t.field('user', {
       type: 'User',
       resolve(root, _args, ctx) {
-        return ctx.prisma.findUnique({
+        return ctx.prisma.user.findUnique({
           where: {
             id: root.userId,
           },
@@ -639,6 +640,26 @@ export const addUserToTeam = mutationField('addUserToTeam', {
         team: {
           connect: { id: args.teamId },
         },
+      },
+    });
+  },
+});
+
+export const createUserProfile = mutationField('createProfile', {
+  type: 'Profile',
+  args: {
+    userId: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.profile.create({
+      data: {
+        user: {
+          connect: {
+            id: args.userId,
+          },
+        },
+        picture: '',
+        availability: new Date(),
       },
     });
   },

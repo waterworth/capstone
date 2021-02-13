@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import Button from '../Button';
 import { FormInput } from '../FormInput/FormInput';
 import * as Yup from 'yup';
-import { useRegisterMutation } from '../../generated/graphql';
+import {
+  useCreateProfileMutation,
+  useRegisterMutation,
+} from '../../generated/graphql';
 import { useRouter } from 'next/router';
 
 interface RegisterFormProps {}
@@ -21,6 +24,7 @@ const ButtonWrapper = styled.div`
 export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
   const router = useRouter();
   const [registerMutation] = useRegisterMutation({});
+  const [createProfileMutation] = useCreateProfileMutation();
 
   const initialValues = {
     username: '',
@@ -48,17 +52,21 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
       initialValues={initialValues}
       validationSchema={SignupSchema}
       onSubmit={async (values, actions) => {
-        console.log(values);
-        actions.setSubmitting(true);
-
-        const response = await registerMutation({
+        const register = await registerMutation({
           variables: {
             username: values.username,
             email: values.email,
             password: values.password,
           },
         });
-        if (response.data?.createUser?.username) {
+
+        const profile = await createProfileMutation({
+          variables: {
+            userId: parseInt(register.data?.createUser?.id as string),
+          },
+        });
+
+        if (register.data?.createUser?.username) {
           router.push('/teams');
         }
       }}>

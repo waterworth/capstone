@@ -1,9 +1,20 @@
 import { Formik, Form } from 'formik';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../Button';
 import styled from 'styled-components';
 import { FormInput } from '../FormInput/FormInput';
-import { useMeQuery } from '../../generated/graphql';
+import {
+  useMeQuery,
+  useUpdateProfileMutation,
+  useUpdateProfilePictureMutation,
+} from '../../generated/graphql';
+// import {
+//   Image,
+//   Video,
+//   Transformation,
+//   CloudinaryContext,
+// } from 'cloudinary-react';
+import ImageUpload from '../ImageUpload';
 
 interface ProfileFormProps {}
 
@@ -35,31 +46,48 @@ const ImageReference = styled.a`
 `;
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
-  const { data, loading, error } = useMeQuery({});
-  console.log(data?.me.profile);
+  const { data } = useMeQuery({});
+  const [profileImg, setProfileImg] = useState('');
+  const [filename, setFilename] = useState('');
+  const [updateProfileMutation] = useUpdateProfileMutation();
+
+  const handleUpload = (img: string, original: string) => {
+    setProfileImg(img);
+    setFilename(original);
+  };
+
+  console.log(data);
+
   return (
     <div>
       <h3>Profile Picture</h3>
       <Formik
         initialValues={{
           image: '',
-          username: '',
-          email: '',
+          username: data?.me?.username,
+          email: data?.me?.email,
         }}
         onSubmit={async (values) => {
-          await new Promise((r) => setTimeout(r, 500));
+          console.log(values);
+          await updateProfileMutation({
+            variables: {
+              userId: parseInt(data!.me!.id!!),
+              email: values.email,
+              username: values.username,
+            },
+          });
         }}>
         <Form>
           <Section>
             <Img
-              src='https://via.placeholder.com/250'
+              src={data?.me?.profile.picture}
               alt='User profile image'
               height={250}
               width={250}
             />
             <Wrapper>
-              <Button content='Upload'></Button>
-              <ImageReference>userimage.png</ImageReference>
+              <ImageUpload onUpload={handleUpload} />
+              <ImageReference>{filename}</ImageReference>
               <span>Images must be 250x250 for optimal usage.</span>
             </Wrapper>
           </Section>
@@ -68,12 +96,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
               name='username'
               type='username'
               label='Username'
-              placeholder='Username'></FormInput>
+              placeholder={data?.me?.username}></FormInput>
             <FormInput
               name='email'
               type='email'
               label='Email'
-              placeholder='Email'></FormInput>
+              placeholder={data?.me?.email}></FormInput>
           </FormSection>
 
           <Button content='Update'></Button>

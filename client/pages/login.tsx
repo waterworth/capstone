@@ -1,5 +1,4 @@
-// TODO Remove main sidebar
-// Add logo
+// TODO  Add logo
 
 import { useApolloClient } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -10,9 +9,6 @@ import { useLoginMutation } from '../generated/graphql';
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  const router = useRouter();
-  const [login] = useLoginMutation();
-  const apolloClient = useApolloClient();
   return <LoginForm />;
 };
 

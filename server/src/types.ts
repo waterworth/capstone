@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import session from 'express-session';
 import { DateTimeResolver } from 'graphql-scalars';
 import {
   arg,
@@ -71,10 +72,10 @@ export const User = objectType({
         });
       },
     });
-    t.list.field('profile', {
+    t.field('profile', {
       type: 'Profile',
-      async resolve(root, _args, ctx) {
-        const profile = await ctx.prisma.profile.findUnique({
+      resolve(root, _args, ctx) {
+        return ctx.prisma.profile.findUnique({
           where: {
             userId: root.id,
           },
@@ -100,7 +101,7 @@ export const Profile = objectType({
         return parent.picture;
       },
     });
-    t.list.string('availability', {
+    t.string('availability', {
       resolve(parent) {
         return parent.availability;
       },
@@ -109,7 +110,7 @@ export const Profile = objectType({
     t.field('user', {
       type: 'User',
       resolve(root, _args, ctx) {
-        return ctx.prisma.findUnique({
+        return ctx.prisma.user.findUnique({
           where: {
             id: root.userId,
           },
@@ -349,7 +350,6 @@ export const createUser = mutationField('createUser', {
       },
     });
     ctx.req.session.userId = user.id;
-    console.log(ctx.req.session);
 
     return user;
   },
@@ -644,6 +644,63 @@ export const addUserToTeam = mutationField('addUserToTeam', {
   },
 });
 
+export const createUserProfile = mutationField('createProfile', {
+  type: 'Profile',
+  args: {
+    userId: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.profile.create({
+      data: {
+        user: {
+          connect: {
+            id: args.userId,
+          },
+        },
+        picture: '',
+        availability: new Date(),
+      },
+    });
+  },
+});
+
+export const updateProfilePicture = mutationField('updateProfilePicture', {
+  type: 'Profile',
+  args: {
+    image: stringArg(),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.profile.update({
+      where: {
+        id: ctx.req.session.userId,
+      },
+      data: {
+        picture: args.image,
+      },
+    });
+  },
+});
+
+export const updateProfile = mutationField('updateProfile', {
+  type: 'User',
+  args: {
+    userId: nonNull(intArg()),
+    username: stringArg(),
+    email: stringArg(),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.user.update({
+      where: {
+        id: args.userId,
+      },
+      data: {
+        username: args.username,
+        email: args.email,
+      },
+    });
+  },
+});
+
 // Queries
 
 export const Query = queryType({
@@ -743,6 +800,20 @@ export const meetingsByUser = queryField('meetingsByUser', {
             users: true,
           },
         },
+      },
+    });
+  },
+});
+
+export const getProfilePicture = queryField('getProfilePicture', {
+  type: 'Profile',
+  args: {
+    userId: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.profile.findUnique({
+      where: {
+        userId: args.userId,
       },
     });
   },

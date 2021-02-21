@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import session from 'express-session';
 import { DateTimeResolver } from 'graphql-scalars';
 import {
   arg,
@@ -16,7 +17,6 @@ import {
 import { v4 as uuid } from 'uuid';
 import { COOKIE__NAME, FORGET__PASSWORD__PREFIX } from './constants';
 import { sendEmail } from './util/sendEmail';
-import { uploadImage } from './util/uploadImage';
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'datetime');
 const dateArg = () => arg({ type: 'DateTime' });
@@ -72,10 +72,10 @@ export const User = objectType({
         });
       },
     });
-    t.list.field('profile', {
+    t.field('profile', {
       type: 'Profile',
-      async resolve(root, _args, ctx) {
-        const profile = await ctx.prisma.profile.findUnique({
+      resolve(root, _args, ctx) {
+        return ctx.prisma.profile.findUnique({
           where: {
             userId: root.id,
           },
@@ -101,7 +101,7 @@ export const Profile = objectType({
         return parent.picture;
       },
     });
-    t.list.string('availability', {
+    t.string('availability', {
       resolve(parent) {
         return parent.availability;
       },
@@ -350,7 +350,6 @@ export const createUser = mutationField('createUser', {
       },
     });
     ctx.req.session.userId = user.id;
-    console.log(ctx.req.session);
 
     return user;
   },
@@ -665,6 +664,43 @@ export const createUserProfile = mutationField('createProfile', {
   },
 });
 
+export const updateProfilePicture = mutationField('updateProfilePicture', {
+  type: 'Profile',
+  args: {
+    image: stringArg(),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.profile.update({
+      where: {
+        id: ctx.req.session.userId,
+      },
+      data: {
+        picture: args.image,
+      },
+    });
+  },
+});
+
+export const updateProfile = mutationField('updateProfile', {
+  type: 'User',
+  args: {
+    userId: nonNull(intArg()),
+    username: stringArg(),
+    email: stringArg(),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.user.update({
+      where: {
+        id: args.userId,
+      },
+      data: {
+        username: args.username,
+        email: args.email,
+      },
+    });
+  },
+});
+
 // Queries
 
 export const Query = queryType({
@@ -764,6 +800,20 @@ export const meetingsByUser = queryField('meetingsByUser', {
             users: true,
           },
         },
+      },
+    });
+  },
+});
+
+export const getProfilePicture = queryField('getProfilePicture', {
+  type: 'Profile',
+  args: {
+    userId: nonNull(intArg()),
+  },
+  resolve(_root, args, ctx) {
+    return ctx.prisma.profile.findUnique({
+      where: {
+        userId: args.userId,
       },
     });
   },

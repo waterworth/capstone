@@ -1,5 +1,3 @@
-// TODO UPDATE CACHE
-
 import { Form, Formik, FormikProps } from 'formik';
 import React from 'react';
 import styled from 'styled-components';

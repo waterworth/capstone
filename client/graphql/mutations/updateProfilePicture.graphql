@@ -1,0 +1,7 @@
+mutation UpdateProfilePicture($image: String!) {
+  updateProfilePicture(image: $image) {
+    user {
+      ...RegularUser
+    }
+  }
+}

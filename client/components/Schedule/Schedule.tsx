@@ -25,6 +25,9 @@ export const Schedule: React.FC<ScheduleProps> = ({}) => {
   );
 
   const { data: meData } = useMeQuery();
+
+  console.log(meData);
+
   const userId: number = parseInt(meData?.me?.id as string);
   const { data } = useUserByIdQuery({
     variables: {

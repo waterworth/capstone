@@ -17,7 +17,6 @@ const Wrapper = styled.header`
 
 const Title = styled.h1`
   margin: 0;
-  padding-left: 3rem;
   font-size: 2rem;
 `;
 

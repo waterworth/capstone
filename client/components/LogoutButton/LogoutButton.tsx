@@ -1,15 +1,21 @@
 import { Router, useRouter } from 'next/router';
 import React from 'react';
 import { useLogoutMutation } from '../../generated/graphql';
-import Button from '../Button';
+
+import styled from 'styled-components';
+import { CenteredButton } from '../Button/Button';
 
 interface LogoutButtonProps {}
+
+const Logout = styled(CenteredButton)`
+  margin-left: 3rem;
+`;
 
 export const LogoutButton: React.FC<LogoutButtonProps> = ({}) => {
   const router = useRouter();
   const [logoutMutation] = useLogoutMutation({});
   return (
-    <Button
+    <Logout
       content='Logout'
       onClick={async (e) => {
         const response = await logoutMutation();

@@ -24,7 +24,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload }) => {
           height: '25px',
         }} // inline styling only or style id='cloudinary_upload_button'
         folder={'profileImages'} // set cloudinary folder name to send file
-        cropping={false}
+        cropping={true}
         onSuccess={(result: any) => {
           updateProfilePictureMutation({
             variables: {

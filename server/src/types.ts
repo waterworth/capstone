@@ -672,7 +672,7 @@ export const updateProfilePicture = mutationField('updateProfilePicture', {
   resolve(_root, args, ctx) {
     return ctx.prisma.profile.update({
       where: {
-        id: ctx.req.session.userId,
+        userId: ctx.req.session.userId,
       },
       data: {
         picture: args.image,

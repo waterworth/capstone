@@ -8,6 +8,7 @@ import {
   useUpdateProfileMutation,
   useUpdateProfilePictureMutation,
 } from '../../generated/graphql';
+import Image from 'next/image';
 // import {
 //   Image,
 //   Video,
@@ -34,6 +35,9 @@ const Wrapper = styled.div`
 
 const Img = styled.img`
   border-radius: 1rem;
+  height: 250px;
+  width: 250px;
+  object-fit: cover;
 `;
 
 const ImageReference = styled.a`
@@ -56,8 +60,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
     setFilename(original);
   };
 
-  console.log(data);
-
   return (
     <div>
       <h3>Profile Picture</h3>
@@ -79,12 +81,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({}) => {
         }}>
         <Form>
           <Section>
-            <Img
-              src={data?.me?.profile.picture}
-              alt='User profile image'
-              height={250}
-              width={250}
-            />
+            <Img src={data?.me?.profile.picture} alt='User profile image' />
             <Wrapper>
               <ImageUpload onUpload={handleUpload} />
               <ImageReference>{filename}</ImageReference>

@@ -11,6 +11,8 @@ import { LogoutButton } from '../LogoutButton/LogoutButton';
 interface SidebarProps {}
 
 const SidebarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   z-index: 2;
   background-color: $cloud;
   width: 21.25rem;
@@ -37,6 +39,9 @@ const Divider = styled.div`
 const Img = styled.img`
   margin-right: 0.75rem;
   border-radius: 0.4rem;
+  height: 46px;
+  width: 46px;
+  object-fit: cover;
 `;
 
 const Info = styled.div`
@@ -51,7 +56,7 @@ const Info = styled.div`
   }
 `;
 
-const UserName = styled.p`
+const UserName = styled.a`
   font-size: 0.825rem;
   font-weight: 400;
 `;
@@ -79,15 +84,19 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
   return (
     <SidebarWrapper>
       <Header>
+        {/* Incorporate team data */}
         <Link href='/'>
           <Img src='https://via.placeholder.com/46' alt='teamlogo' />
         </Link>
         <Divider> </Divider>
-        <Img src='https://via.placeholder.com/46' alt='userImage' />
+        <Img src={data?.me?.profile!.picture!} alt='userImage' />
         <Info>
-          <UserName>{data?.me?.username}</UserName>
+          <UserName href='/profile/${...data?.me?.id}'>
+            {data?.me?.username}
+          </UserName>
+
+          {/* Incorporate team data  */}
           <UserRole>{data?.me?.isAdmin ? 'Administrator' : 'User'}</UserRole>
-          {/* Investigate ^ this */}
         </Info>
       </Header>
       <Nav>

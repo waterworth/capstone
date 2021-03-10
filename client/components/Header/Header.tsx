@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import { useMeQuery } from '../../generated/graphql';
+//import { useMeQuery } from '../../generated/graphql';
 
 const Wrapper = styled.header`
   padding: 4rem 3rem 1.5rem 0;
@@ -28,7 +27,7 @@ const UserImage = styled.img`
 `;
 
 export const Header = (props: any) => {
-  const { data } = useMeQuery();
+  // const { data } = useMeQuery();
 
   return (
     <Wrapper>

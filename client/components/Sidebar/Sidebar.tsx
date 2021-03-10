@@ -1,7 +1,6 @@
 // TODO add icons
 // add active toggle on click
 
-import { useApolloClient } from '@apollo/client';
 import styled from 'styled-components';
 import Link from 'next/link';
 import React from 'react';
@@ -79,8 +78,7 @@ const Option = styled.li`
 `;
 
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
-  const apolloClient = useApolloClient();
-  const { data, loading, error } = useMeQuery();
+  const { data } = useMeQuery();
   return (
     <SidebarWrapper>
       <Header>
@@ -89,14 +87,14 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
           <Img src='https://via.placeholder.com/46' alt='teamlogo' />
         </Link>
         <Divider> </Divider>
-        <Img src={data?.me?.profile!.picture!} alt='userImage' />
+        <Img src={data?.me?.profile?.picture} alt='userImage' />
         <Info>
           <UserName href='/profile/${...data?.me?.id}'>
             {data?.me?.username}
           </UserName>
 
           {/* Incorporate team data  */}
-          <UserRole>{data?.me?.isAdmin ? 'Administrator' : 'User'}</UserRole>
+          <UserRole>{data?.me ? 'Administrator' : 'User'}</UserRole>
         </Info>
       </Header>
       <Nav>
